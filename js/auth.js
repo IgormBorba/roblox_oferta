@@ -3,6 +3,13 @@ const auth = {
     USERS_KEY: 'carnavalbux_users',
     CURRENT_USER_KEY: 'carnavalbux_current_user',
 
+    // Função para gerar ID único
+    generateId() {
+        const timestamp = new Date().getTime();
+        const random = Math.floor(Math.random() * 1000000);
+        return `${timestamp}-${random}`;
+    },
+
     // Inicializa o storage se necessário
     init() {
         if (!localStorage.getItem(this.USERS_KEY)) {
@@ -22,7 +29,7 @@ const auth = {
 
         // Cria novo usuário
         const newUser = {
-            id: crypto.randomUUID(),
+            id: this.generateId(),
             name,
             email,
             password, // Em produção, a senha deveria ser hasheada
