@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CARNAVALBUX - A loja N°1 de Robux no Brasil!</title>
+    <link rel="icon" type="image/png" href="img/logocarnaval.png">
+    <script>
+        // Configuração do caminho base
+        const baseUrl = window.location.pathname.includes('/public/') ? '/public' : '';
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#3D8A0C",
+                        "primary-foreground": "#ffffff",
+                        border: "#27272a",
+                        foreground: "#fafafa",
+                        "muted-foreground": "#a1a1aa",
+                        background: "#18181b",
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        @keyframes gamerGlow {
+            0% {
+                text-shadow: 0 0 10px rgba(61, 138, 12, 0.5),
+                            0 0 20px rgba(61, 138, 12, 0.3),
+                            0 0 30px rgba(61, 138, 12, 0.2);
+                transform: scale(1);
+            }
+            50% {
+                text-shadow: 0 0 20px rgba(61, 138, 12, 0.8),
+                            0 0 30px rgba(61, 138, 12, 0.5),
+                            0 0 40px rgba(61, 138, 12, 0.3);
+                transform: scale(1.02);
+            }
+            100% {
+                text-shadow: 0 0 10px rgba(61, 138, 12, 0.5),
+                            0 0 20px rgba(61, 138, 12, 0.3),
+                            0 0 30px rgba(61, 138, 12, 0.2);
+                transform: scale(1);
+            }
+        }
+
+        .gamer-title {
+            animation: gamerGlow 2s ease-in-out infinite;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        .gamer-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #3D8A0C, transparent);
+            animation: scanline 2s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        /* Grid de produtos */
+        .products-grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(2, 1fr); /* 2 colunas por padrão (mobile) */
+            padding: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr); /* 3 colunas em tablets */
+                gap: 1.5rem;
+                padding: 1.5rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .products-grid {
+                grid-template-columns: repeat(4, 1fr); /* 4 colunas em desktop */
+                gap: 2rem;
+                padding: 2rem;
+            }
+        }
+
+        /* Ajustes para cards de produtos em mobile */
+        .product-card {
+            background-color: var(--background);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .product-card {
+                padding: 1rem;
+                gap: 0.75rem;
+            }
+        }
+
+        /* Ajuste da imagem do produto para mobile */
+        .product-image {
+            aspect-ratio: 1;
+            width: 100%;
+            object-fit: contain;
+            border-radius: 0.375rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 0.5rem;
+        }
+
+        /* Ajuste do título do produto para mobile */
+        .product-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        @media (min-width: 640px) {
+            .product-title {
+                font-size: 1rem;
+            }
+        }
+
+        /* Ajuste do preço para mobile */
+        .product-price {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        @media (min-width: 640px) {
+            .product-price {
+                font-size: 1rem;
+            }
+        }
+
+        /* Ajuste do botão para mobile */
+        .buy-button {
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 0.875rem;
+            border-radius: 0.375rem;
+        }
+
+        @media (min-width: 640px) {
+            .buy-button {
+                padding: 0.625rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background min-h-screen relative overflow-x-hidden">
+    <!-- Background SVG -->
+    <span class="absolute top-0 right-[-30%] inset-0 overflow-hidden h-[64rem] z-[-1]" style="background:radial-gradient(49.63% 57.02% at 58.99% -7.2%, rgb(16 185 129 / 0.1) 39.4%, rgba(0, 0, 0, 0) 100%)">
+        <svg width="790" height="640" viewBox="0 0 790 718" fill="none" xmlns="http://www.w3.org/2000/svg" class="absolute pl-48 -top-16 left-1/2 -translate-x-1/2">
+            <mask id="mask-dark" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="-143" width="936" height="861">
+                <ellipse cx="468.373" cy="287.536" rx="467.627" ry="430.464" fill="url(#radial-dark)"></ellipse>
+            </mask>
+            <g mask="url(#mask-dark)" class="fill-primary dark:fill-primary-light">
+                <path d="M506.419 281.855L446.417 297.931V359.885L506.419 343.71V281.855Z" fill-opacity="0.05"></path>
+                <path d="M384.768 188.752L324.766 204.828V266.781L384.768 250.606V188.752Z" fill-opacity="0.05"></path>
+                <path d="M263.625 347.002L203.623 363.078V425.031L263.625 408.856V347.002Z" fill-opacity="0.05"></path>
+                <path d="M385.089 440.096L325.087 456.172V518.125L385.089 501.95V440.096Z" fill-opacity="0.05"></path>
+                <path d="M627.756 123.527L567.754 139.603V201.557L627.756 185.382V123.527Z" fill-opacity="0.05"></path>
+                <path d="M445.32 46.918L385.318 62.994V124.947L445.32 108.772V46.918Z" fill-opacity="0.05"></path>
+                <path d="M749.192 279.59L689.19 295.666V357.619L749.192 341.444V279.59Z" fill-opacity="0.05"></path>
+                <path d="M627.905 437.912L567.903 453.988V515.941L627.905 499.766V437.912Z" fill-opacity="0.05"></path>
+                <path d="M202.491 175.656L142.489 191.732V253.685L202.491 237.511V175.656Z" fill-opacity="0.05"></path>
+            </g>
+            <defs>
+                <radialGradient id="radial-dark" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(468.373 287.536) rotate(90) scale(430.464 467.627)">
+                    <stop stop-color="#D9D9D9"></stop>
+                    <stop offset="1" stop-opacity="0"></stop>
+                </radialGradient>
+            </defs>
+        </svg>
+    </span>
+
+    <!-- Header -->
+    <header class="border-b border-border sticky top-0 z-50 bg-background/80 backdrop-blur-sm">
+        <div class="container max-w-screen-xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <a href="javascript:void(0)" onclick="window.location.href = baseUrl + '/'">
+                    <img src="" alt="CARNAVALBUX" class="h-8 w-auto hover:opacity-90 transition-opacity" id="logoImg" />
+                </a>
+                
+                <div class="flex items-center gap-4">
+                    <a href="javascript:void(0)" onclick="window.location.href = baseUrl + '/cart.html'" class="relative hover:text-primary transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-foreground"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                        <span id="cartCount" class="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                    </a>
+                    
+                    <div id="userSection" class="hidden relative">
+                        <button id="userButton" class="flex items-center gap-2 text-sm font-medium text-foreground hover:text-primary transition-colors">
+                            <span id="userName">Usuário</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        </button>
+                        <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-background ring-1 ring-border">
+                            <div class="py-1">
+                                <a href="#" class="block px-4 py-2 text-sm text-foreground hover:bg-border">Meu Perfil</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-foreground hover:bg-border">Pedidos</a>
+                                <button id="logoutButton" class="block w-full text-left px-4 py-2 text-sm text-foreground hover:bg-border">Sair</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="authSection">
+                        <a href="javascript:void(0)" onclick="window.location.href = baseUrl + '/login.html'" class="text-sm font-medium text-foreground hover:text-primary transition-colors">Entrar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="space-y-12 py-12">
+        <!-- Hero Section -->
+        <section class="relative">
+            <div class="container max-w-screen-xl mx-auto py-12 md:py-24 flex items-center justify-center px-4">
+                <div class="flex flex-col items-center justify-center text-center max-w-3xl mx-auto">
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 text-primary gamer-title">
+                        CARNAVALBUX
+                    </h1>
+                    <p class="text-foreground text-base md:text-lg mb-6 md:mb-8 max-w-2xl px-4">
+                        A loja N°1 de Robux no Brasil! Garantimos entrega rápida, segurança total e os melhores preços para sua diversão no Roblox.
+                    </p>
+                    <div class="flex flex-row gap-3">
+                        <a href="#products">
+                            <button class="inline-flex items-center gap-2 justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 md:h-12 px-6 md:px-8 py-2 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5" type="button">
+                                Ver produtos
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="products" class="relative space-y-12 md:space-y-16">
+            <!-- Featured Products -->
+            <div class="container max-w-screen-xl mx-auto px-4">
+                <div class="flex flex-col items-center justify-center text-center mb-6 md:mb-8">
+                    <h4 class="text-2xl md:text-3xl font-bold text-foreground mb-2">Produtos em Destaque</h4>
+                    <p class="text-sm md:text-base text-muted-foreground">Aproveite as melhores ofertas com até 33% de desconto! 🔥</p>
+                </div>
+                <div id="featuredProducts" class="products-grid">
+                    <!-- Featured products will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Regular Products -->
+            <div class="container max-w-screen-xl mx-auto px-4">
+                <div class="flex flex-col items-center justify-center text-center mb-6 md:mb-8">
+                    <h4 class="text-2xl md:text-3xl font-bold text-foreground mb-2">Produtos</h4>
+                    <p class="text-sm md:text-base text-muted-foreground">Comece com pequenos valores e vá crescendo! 🚀</p>
+                </div>
+                <div id="regularProducts" class="products-grid">
+                    <!-- Regular products will be inserted here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Notificações de Compras -->
+    <div id="purchaseNotification" class="fixed bottom-4 left-4 max-w-sm bg-background/95 border border-border rounded-lg shadow-lg p-4 transform transition-all duration-500 translate-y-full opacity-0">
+        <div class="flex items-start gap-3">
+            <div class="flex-shrink-0 bg-primary/10 p-2 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            </div>
+            <div class="flex-1">
+                <p class="text-sm font-medium text-foreground" id="notificationText"></p>
+                <p class="text-xs text-muted-foreground mt-1">Agora mesmo</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-border w-full py-10 mt-20">
+        <div class="container max-w-screen-xl mx-auto px-4 space-y-6">
+            <div class="grid gap-8 md:grid-cols-[2fr_3fr]">
+                <!-- Logo e Info -->
+                <div class="space-y-4 pr-0 md:pr-10">
+                    <div class="space-y-3">
+                        <img src="img/logocarnaval.png" width="auto" alt="CARNAVALBUX" class="h-12">
+                        <div class="text-sm text-muted-foreground font-normal">
+                            A melhor loja de robux do Brasil!
+                        </div>
+                    </div>
+                    <div class="font-medium text-xs text-muted-foreground">
+                        Copyright © CARNAVALBUX - Todos os Direitos Reservados
+                    </div>
+                </div>
+
+                <!-- Links de Navegação -->
+                <nav class="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full">
+                    <div>
+                        <h2 class="font-medium text-foreground">Navegação</h2>
+                        <ul class="space-y-2 mt-3">
+                            <li>
+                                <a class="text-sm text-muted-foreground hover:text-foreground hover:underline transition-colors" href="/feedback">Feedback</a>
+                            </li>
+                            <li>
+                                <a class="text-sm text-muted-foreground hover:text-foreground hover:underline transition-colors" href="/categories">Categorias</a>
+                            </li>
+                            <li>
+                                <a class="text-sm text-muted-foreground hover:text-foreground hover:underline transition-colors" href="/products">Catálogo</a>
+                            </li>
+                            <li>
+                                <a class="text-sm text-muted-foreground hover:text-foreground hover:underline transition-colors" href="/cart.html">Carrinho</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h2 class="font-medium text-foreground">Empresa</h2>
+                        <ul class="space-y-2 mt-3">
+                            <li>
+                                <a class="text-sm text-muted-foreground hover:text-foreground hover:underline transition-colors" href="/terms">Termos e Serviços</a>
+                            </li>
+                            <li>
+                                <a class="text-sm text-muted-foreground hover:text-foreground hover:underline transition-colors" href="/terms">Termos de uso</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h2 class="font-medium text-foreground">Conta</h2>
+                        <ul class="space-y-2 mt-3">
+                            <li>
+                                <a class="text-sm text-muted-foreground hover:text-foreground hover:underline transition-colors" href="/account">Minha conta</a>
+                            </li>
+                            <li>
+                                <a class="text-sm text-muted-foreground hover:text-foreground hover:underline transition-colors" href="/account/purchases">Minhas compras</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+
+            <!-- Divisor -->
+            <div class="shrink-0 bg-border h-[1px] w-full"></div>
+
+        </div>
+    </footer>
+
+    <!-- Modal de Pagamento -->
+    <div id="paymentModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden">
+        <div class="fixed inset-0 flex items-center justify-center p-4">
+            <div class="bg-background border border-border rounded-lg shadow-xl w-full max-w-3xl overflow-hidden">
+                <!-- Header do Modal -->
+                <div class="border-b border-border p-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <img src="img/logocarnaval.png" alt="CARNAVALBUX" class="h-8">
+                        <h2 class="text-xl font-semibold text-foreground">Pagamento Seguro</h2>
+                    </div>
+                    <button onclick="closePaymentModal()" class="text-muted-foreground hover:text-foreground transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                    </button>
+                </div>
+
+                <!-- Conteúdo do Modal -->
+                <div class="p-6">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <!-- Detalhes do Pedido -->
+                        <div class="space-y-6">
+                            <div class="flex items-start gap-4 bg-background/50 p-4 rounded-lg border border-border">
+                                <div class="flex-shrink-0">
+                                    <div class="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><path d="M20.91 8.84 8.56 2.23a1.93 1.93 0 0 0-1.81 0L3.1 4.13a2.12 2.12 0 0 0-.05 3.69l12.22 6.93a2 2 0 0 0 1.94 0L21 12.51a2.12 2.12 0 0 0-.09-3.67Z"/><path d="m3.09 8.84 12.35-6.61a1.93 1.93 0 0 1 1.81 0l3.65 1.9a2.12 2.12 0 0 1 .1 3.69L8.73 14.75a2 2 0 0 1-1.94 0L3 12.51a2.12 2.12 0 0 1 .09-3.67Z"/><line x1="12" y1="22" x2="12" y2="13"/></svg>
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 id="modalProductTitle" class="font-semibold text-foreground mb-1"></h3>
+                                    <p class="text-sm text-muted-foreground mb-2">Entrega automática após confirmação</p>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xs text-muted-foreground">Total:</span>
+                                        <span id="modalProductPrice" class="text-lg font-bold text-primary"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3">
+                                <h4 class="font-medium text-foreground">Instruções:</h4>
+                                <ol class="space-y-2 text-sm text-muted-foreground">
+                                    <li class="flex items-center gap-2">
+                                        <span class="flex-shrink-0 w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">1</span>
+                                        <span>Abra o app do seu banco</span>
+                                    </li>
+                                    <li class="flex items-center gap-2">
+                                        <span class="flex-shrink-0 w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">2</span>
+                                        <span>Escolha pagar via PIX com QR Code</span>
+                                    </li>
+                                    <li class="flex items-center gap-2">
+                                        <span class="flex-shrink-0 w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">3</span>
+                                        <span>Escaneie o código ou use o PIX copia e cola</span>
+                                    </li>
+                                    <li class="flex items-center gap-2">
+                                        <span class="flex-shrink-0 w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs">4</span>
+                                        <span>Confirme o pagamento e aguarde a entrega automática</span>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <!-- QR Code e Código PIX -->
+                        <div class="space-y-6">
+                            <div class="flex flex-col items-center gap-4 p-4 bg-background/50 rounded-lg border border-border">
+                                <div id="qr-code" class="bg-white p-4 rounded-lg"></div>
+                                <p class="text-sm text-muted-foreground">Escaneie o QR Code para pagar</p>
+                            </div>
+
+                            <div class="space-y-3">
+                                <h4 class="font-medium text-foreground">PIX Copia e Cola:</h4>
+                                <div class="relative">
+                                    <textarea id="pix-code" rows="3" class="w-full rounded-md bg-background/50 border border-border p-3 text-sm text-foreground resize-none" readonly></textarea>
+                                    <button onclick="copiarCodigoPix()" class="absolute right-2 top-2 p-1 text-primary hover:text-primary/80 transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+                                Pagamento 100% Seguro
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Ajusta os caminhos das imagens e scripts após o carregamento da página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ajusta o caminho do logo
+            document.getElementById('logoImg').src = baseUrl + '/img/logocarnaval.png';
+            
+            // Ajusta os caminhos dos scripts
+            const scripts = [
+                '/js/auth.js',
+                '/js/products.js',
+                '/js/cart.js'
+            ];
+            
+            let loadedScripts = 0;
+            scripts.forEach(script => {
+                const scriptElement = document.createElement('script');
+                scriptElement.src = baseUrl + script;
+                scriptElement.onload = function() {
+                    loadedScripts++;
+                    if (loadedScripts === scripts.length) {
+                        // Todos os scripts foram carregados
+                        initializePage();
+                    }
+                };
+                document.body.appendChild(scriptElement);
+            });
+        });
+
+        // Função de inicialização da página
+        function initializePage() {
+            // Verifica autenticação e atualiza UI
+            if (typeof auth !== 'undefined') {
+                updateAuthUI();
+            }
+            
+            // Renderiza os produtos
+            renderProducts();
+            
+            // Atualiza o contador do carrinho
+            updateCartCount();
+        }
+
+        // Atualiza a função de redirecionamento
+        function redirectToLogin() {
+            window.location.href = baseUrl + '/login.html';
+        }
+
+        // Atualiza função de logout
+        function logout() {
+            auth.logout();
+            window.location.href = baseUrl + '/login.html';
+        }
+
+        // Atualiza interface baseado no estado de autenticação
+        function updateAuthUI() {
+            const user = auth.getCurrentUser();
+            const userSection = document.getElementById('userSection');
+            const authSection = document.getElementById('authSection');
+            const userName = document.getElementById('userName');
+
+            if (user) {
+                userSection.classList.remove('hidden');
+                authSection.classList.add('hidden');
+                userName.textContent = user.name;
+            } else {
+                userSection.classList.add('hidden');
+                authSection.classList.remove('hidden');
+            }
+        }
+
+        // Toggle menu do usuário
+        document.getElementById('userButton')?.addEventListener('click', () => {
+            const menu = document.getElementById('userMenu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Logout
+        document.getElementById('logoutButton')?.addEventListener('click', () => {
+            logout();
+        });
+
+        // Renderiza produtos
+        function renderProducts() {
+            const allProducts = products.getAll();
+            
+            // Ordena produtos por preço
+            const sortedProducts = [...allProducts].sort((a, b) => b.price - a.price);
+            
+            // Separa em produtos caros (top 4) e baratos
+            const expensiveProducts = sortedProducts.slice(0, 4);
+            const cheapProducts = sortedProducts.slice(4);
+
+            // Ordena produtos em destaque por maior desconto
+            const featuredContainer = document.getElementById('featuredProducts');
+            featuredContainer.innerHTML = expensiveProducts
+                .sort((a, b) => b.discount_percent - a.discount_percent)
+                .map(product => renderProductCard(product))
+                .join('');
+
+            // Ordena produtos regulares por menor preço
+            const regularContainer = document.getElementById('regularProducts');
+            regularContainer.innerHTML = cheapProducts
+                .sort((a, b) => a.price - b.price)
+                .map(product => renderProductCard(product))
+                .join('');
+        }
+
+        // Renderiza card do produto
+        function renderProductCard(product) {
+            return `
+                <a href="product.html?id=${product.id}" class="block">
+                    <div class="group bg-background/50 rounded-xl border-2 border-border p-3 md:p-4 hover:border-primary transition-all hover:shadow-lg hover:-translate-y-1">
+                        <div class="w-full overflow-hidden rounded-lg mb-3 md:mb-4 relative">
+                            ${product.discount_percent > 0 ? `
+                                <div class="inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground absolute top-2 left-2 md:top-3 md:left-3 z-10">
+                                    -${product.discount_percent}%
+                                </div>
+                            ` : ''}
+                            <img alt="${product.title}" loading="lazy" class="w-full aspect-[256/152] object-cover rounded-lg group-hover:scale-105 hover:brightness-110 transition duration-300" src="${product.image}">
+                        </div>
+                        <div class="space-y-3 md:space-y-4">
+                            <h2 class="font-semibold text-foreground text-base md:text-lg tracking-tight line-clamp-2 uppercase">
+                                ${product.title}
+                            </h2>
+                            <div class="flex flex-wrap gap-2 md:gap-3">
+                                ${product.automatic_delivery ? `
+                                    <div class="inline-flex items-center rounded-md border text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground shadow hover:bg-primary/80 py-1 px-2 md:px-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
+                                            <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"></path>
+                                            <path d="M15 18H9"></path>
+                                            <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"></path>
+                                            <circle cx="17" cy="18" r="2"></circle>
+                                            <circle cx="7" cy="18" r="2"></circle>
+                                        </svg>
+                                        Entrega automática
+                                    </div>
+                                ` : ''}
+                            </div>
+                            <div>
+                                ${product.discount_percent > 0 ? `
+                                    <div class="text-xs md:text-sm text-muted-foreground">
+                                        <del>De <span>R$ ${product.original_price.toFixed(2)}</span></del> por:
+                                    </div>
+                                ` : ''}
+                                <span class="text-lg md:text-xl font-bold text-foreground">
+                                    R$ ${product.price.toFixed(2)}
+                                </span>
+                            </div>
+                            <button onclick="event.preventDefault(); addToCart('${product.id}')" class="w-full inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 md:h-10 px-3 md:px-4 py-2 shadow-md hover:shadow-lg hover:-translate-y-0.5">
+                                Adicionar ao carrinho
+                            </button>
+                        </div>
+                    </div>
+                </a>
+            `;
+        }
+
+        // Adiciona produto ao carrinho
+        function addToCart(productId) {
+            if (!auth.isAuthenticated()) {
+                redirectToLogin();
+                return;
+            }
+            
+            cart.addItem(productId);
+            updateCartCount();
+            
+            // Feedback visual de sucesso
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-primary/10 border border-primary text-primary px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in';
+            notification.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                    <span>Produto adicionado ao carrinho!</span>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Atualiza contador do carrinho
+        function updateCartCount() {
+            const count = cart.getCount();
+            document.getElementById('cartCount').textContent = count;
+        }
+
+        // Sistema de notificações de compras
+        const nomes = [
+            "Miguel", "Arthur", "Gael", "Théo", "Heitor", "Ravi", "Davi", "Bernardo", "Noah", "Gabriel",
+            "Samuel", "Pedro", "Anthony", "Isaac", "Benício", "Benjamin", "Matheus", "Lucas", "Joaquim", "Nicolas",
+            "Sofia", "Alice", "Laura", "Maria Alice", "Valentina", "Heloísa", "Helena", "Cecília", "Clara", "Isabella",
+            "Lívia", "Lorena", "Manuela", "Beatriz", "Lara", "Mariana", "Nicole", "Rafaela", "Vitória", "Olívia"
+        ];
+
+        const produtos = [
+            { quantidade: 800, preco: 29.90 },
+            { quantidade: 1700, preco: 59.90 },
+            { quantidade: 4500, preco: 149.90 },
+            { quantidade: 200, preco: 7.90 },
+            { quantidade: 400, preco: 10.90 },
+            { quantidade: 1000, preco: 29.90 },
+            { quantidade: 1200, preco: 59.90 },
+            { quantidade: 2000, preco: 79.90 }
+        ];
+
+        function mostrarNotificacao() {
+            const nome = nomes[Math.floor(Math.random() * nomes.length)];
+            const produto = produtos[Math.floor(Math.random() * produtos.length)];
+            const desconto = Math.floor(Math.random() * 15) + 20; // Desconto entre 20% e 35%
+
+            const notification = document.getElementById('purchaseNotification');
+            const text = document.getElementById('notificationText');
+            
+            text.innerHTML = `<span class="text-primary font-medium">${nome}</span> acabou de comprar <span class="text-primary font-medium">${produto.quantidade} Robux</span> com <span class="text-primary font-medium">${desconto}% de desconto</span>! 🎉`;
+            
+            notification.classList.remove('translate-y-full', 'opacity-0');
+            
+            setTimeout(() => {
+                notification.classList.add('translate-y-full', 'opacity-0');
+            }, 5000);
+        }
+
+        // Mostra primeira notificação após 3 segundos
+        setTimeout(() => {
+            mostrarNotificacao();
+            // Continua mostrando notificações a cada 8-15 segundos
+            setInterval(() => {
+                mostrarNotificacao();
+            }, Math.random() * 7000 + 8000);
+        }, 3000);
+
+        // Funções do Modal de Pagamento
+        function openPaymentModal(product) {
+            const modal = document.getElementById('paymentModal');
+            document.getElementById('modalProductTitle').textContent = product.title;
+            document.getElementById('modalProductPrice').textContent = `R$ ${product.price.toFixed(2)}`;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            gerarPix(product);
+        }
+
+        function closePaymentModal() {
+            const modal = document.getElementById('paymentModal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Funções de Pagamento PIX
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+            document.cookie = `${name}=${encodeURIComponent(value)};expires=${date.toUTCString()};path=/`;
+        }
+
+        function getCookie(name) {
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                cookie = cookie.trim();
+                if (cookie.startsWith(name + '=')) {
+                    return decodeURIComponent(cookie.substring(name.length + 1));
+                }
+            }
+            return null;
+        }
+
+        async function gerarPix(product) {
+            try {
+                const { qrCodeString, copyPasteCode } = await payment.gerarPix(product.price);
+                payment.renderQrCode(qrCodeString, copyPasteCode);
+            } catch (error) {
+                console.error("Erro ao gerar PIX:", error);
+            }
+        }
+
+        function renderQrCode(qrCodeString, copyPasteCode) {
+            const qrCodeElement = document.getElementById('qr-code');
+            const pixCodeElement = document.getElementById('pix-code');
+
+            // Renderiza QR Code
+            qrCodeElement.innerHTML = '';
+            new QRCode(qrCodeElement, {
+                text: qrCodeString,
+                width: 200,
+                height: 200,
+            });
+
+            // Atualiza código copia e cola
+            pixCodeElement.value = copyPasteCode;
+        }
+
+        function copiarCodigoPix() {
+            const pixCode = document.getElementById('pix-code');
+            pixCode.select();
+            document.execCommand('copy');
+            
+            // Feedback visual
+            const button = pixCode.nextElementSibling;
+            const originalHTML = button.innerHTML;
+            button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
+            setTimeout(() => {
+                button.innerHTML = originalHTML;
+            }, 2000);
+        }
+    </script>
+</body>
+</html> 

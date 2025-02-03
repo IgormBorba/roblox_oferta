@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - CARNAVALBUX</title>
+    <script>
+        // Configuração do caminho base
+        const baseUrl = window.location.pathname.includes('/public/') ? '/public' : '';
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#3D8A0C",
+                        "primary-foreground": "#ffffff",
+                        border: "#27272a",
+                        foreground: "#fafafa",
+                        "muted-foreground": "#a1a1aa",
+                        background: "#18181b",
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background min-h-screen relative overflow-x-hidden">
+    <!-- Background SVG -->
+    <span class="absolute top-0 right-[-30%] inset-0 overflow-hidden h-[64rem] z-[-1]" style="background:radial-gradient(49.63% 57.02% at 58.99% -7.2%, rgb(16 185 129 / 0.1) 39.4%, rgba(0, 0, 0, 0) 100%)">
+        <svg width="790" height="640" viewBox="0 0 790 718" fill="none" xmlns="http://www.w3.org/2000/svg" class="absolute pl-48 -top-16 left-1/2 -translate-x-1/2">
+            <mask id="mask-dark" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="-143" width="936" height="861">
+                <ellipse cx="468.373" cy="287.536" rx="467.627" ry="430.464" fill="url(#radial-dark)"></ellipse>
+            </mask>
+            <g mask="url(#mask-dark)" class="fill-primary dark:fill-primary-light">
+                <path d="M506.419 281.855L446.417 297.931V359.885L506.419 343.71V281.855Z" fill-opacity="0.05"></path>
+                <path d="M384.768 188.752L324.766 204.828V266.781L384.768 250.606V188.752Z" fill-opacity="0.05"></path>
+                <path d="M263.625 347.002L203.623 363.078V425.031L263.625 408.856V347.002Z" fill-opacity="0.05"></path>
+                <path d="M385.089 440.096L325.087 456.172V518.125L385.089 501.95V440.096Z" fill-opacity="0.05"></path>
+                <path d="M627.756 123.527L567.754 139.603V201.557L627.756 185.382V123.527Z" fill-opacity="0.05"></path>
+                <path d="M445.32 46.918L385.318 62.994V124.947L445.32 108.772V46.918Z" fill-opacity="0.05"></path>
+                <path d="M749.192 279.59L689.19 295.666V357.619L749.192 341.444V279.59Z" fill-opacity="0.05"></path>
+                <path d="M627.905 437.912L567.903 453.988V515.941L627.905 499.766V437.912Z" fill-opacity="0.05"></path>
+                <path d="M202.491 175.656L142.489 191.732V253.685L202.491 237.511V175.656Z" fill-opacity="0.05"></path>
+            </g>
+            <defs>
+                <radialGradient id="radial-dark" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(468.373 287.536) rotate(90) scale(430.464 467.627)">
+                    <stop stop-color="#D9D9D9"></stop>
+                    <stop offset="1" stop-opacity="0"></stop>
+                </radialGradient>
+            </defs>
+        </svg>
+    </span>
+
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full">
+            <div class="bg-background/80 border border-border backdrop-blur-sm p-8 rounded-2xl shadow-xl">
+                <div class="text-center mb-8">
+                    <div class="flex justify-center mb-4">
+                        <img src="" alt="CARNAVALBUX" class="h-12 w-auto" id="logoImg" />
+                    </div>
+                    <p class="text-muted-foreground">
+                        Faça login para acessar sua conta
+                    </p>
+                </div>
+                <form class="space-y-6" id="loginForm">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-foreground mb-1">Email</label>
+                            <input id="email" name="email" type="email" required 
+                                class="appearance-none block w-full px-3 py-2 border border-border rounded-md shadow-sm placeholder-muted-foreground bg-background/50 text-foreground focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" 
+                                placeholder="seu@email.com">
+                        </div>
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-foreground mb-1">Senha</label>
+                            <input id="password" name="password" type="password" required 
+                                class="appearance-none block w-full px-3 py-2 border border-border rounded-md shadow-sm placeholder-muted-foreground bg-background/50 text-foreground focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" 
+                                placeholder="••••••••">
+                        </div>
+                    </div>
+
+                    <div>
+                        <button type="submit" 
+                            class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all hover:shadow-lg hover:-translate-y-0.5">
+                            Entrar
+                        </button>
+                    </div>
+
+                    <div class="flex items-center justify-between text-sm">
+                        <a href="#" class="font-medium text-primary hover:text-primary/90 transition-colors">
+                            Esqueceu sua senha?
+                        </a>
+                        <a href="register.html" class="font-medium text-primary hover:text-primary/90 transition-colors">
+                            Criar conta
+                        </a>
+                    </div>
+                </form>
+            </div>
+            <div class="mt-4 text-center">
+                <a href="javascript:void(0)" onclick="window.location.href = baseUrl + '/'" class="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    ← Voltar para a loja
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Ajusta os caminhos das imagens e scripts após o carregamento da página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ajusta o caminho do logo
+            document.getElementById('logoImg').src = baseUrl + '/img/logocarnaval.png';
+            
+            // Carrega o script de autenticação
+            const authScript = document.createElement('script');
+            authScript.src = baseUrl + '/js/auth.js';
+            authScript.onload = function() {
+                // Adiciona o evento de submit após carregar o script de autenticação
+                document.getElementById('loginForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('password').value;
+
+                    if (auth.login(email, password)) {
+                        window.location.href = baseUrl + '/index.html';
+                    } else {
+                        alert('Email ou senha inválidos');
+                    }
+                });
+            };
+            document.body.appendChild(authScript);
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Produto - CARNAVALBUX</title>
+    <link rel="icon" type="image/png" href="img/logocarnaval.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#3D8A0C",
+                        "primary-foreground": "#ffffff",
+                        border: "#27272a",
+                        foreground: "#fafafa",
+                        "muted-foreground": "#a1a1aa",
+                        background: "#18181b",
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background min-h-screen relative overflow-x-hidden">
+    <!-- Background SVG -->
+    <span class="absolute top-0 right-[-30%] inset-0 overflow-hidden h-[64rem] z-[-1]" style="background:radial-gradient(49.63% 57.02% at 58.99% -7.2%, rgb(16 185 129 / 0.1) 39.4%, rgba(0, 0, 0, 0) 100%)">
+        <!-- ... SVG background code ... -->
+    </span>
+
+    <!-- Header -->
+    <header class="border-b border-border sticky top-0 z-50 bg-background/80 backdrop-blur-sm">
+        <div class="container max-w-screen-xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <a href="/" class="flex items-center">
+                    <img src="img/logocarnaval.png" alt="CARNAVALBUX" class="h-8 w-auto hover:opacity-90 transition-opacity" />
+                </a>
+                
+                <div class="flex items-center gap-4">
+                    <a href="/cart.html" class="relative hover:text-primary transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-foreground"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                        <span id="cartCount" class="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                    </a>
+                    
+                    <div id="userSection" class="hidden relative">
+                        <!-- ... User menu code ... -->
+                    </div>
+                    
+                    <div id="authSection">
+                        <a href="login.html" class="text-sm font-medium text-foreground hover:text-primary transition-colors">Entrar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-8 md:py-12">
+        <div class="container max-w-screen-xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row gap-6 md:gap-10">
+                <!-- Product Image and Info -->
+                <div class="flex-1 flex flex-col md:flex-row gap-4 md:gap-6">
+                    <div class="flex flex-col gap-3 w-full md:w-auto">
+                        <img id="productImage" alt="" loading="lazy" class="rounded-lg w-full md:w-auto object-cover md:max-w-lg max-h-80" src="">
+                    </div>
+                    <div class="flex flex-col items-start flex-1 space-y-3 md:space-y-4">
+                        <ul class="flex items-center space-x-2">
+                            <li class="text-xs text-muted-foreground">Entrega automática</li>
+                        </ul>
+                        <h2 id="productTitle" class="text-xl md:text-2xl font-semibold text-foreground !mt-1.5"></h2>
+                        <span id="productPrice" class="text-xl md:text-2xl text-primary font-semibold !mt-1.5"></span>
+                        <button onclick="addToCart()" class="w-full md:w-auto inline-flex items-center gap-2 justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-10 md:h-11 px-4 md:px-5 mt-2 md:mt-3" type="button">
+                            Comprar agora
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product Details -->
+                <div class="w-full md:w-auto md:min-w-[300px]">
+                    <h4 class="text-lg font-medium mb-2 text-foreground">Detalhes</h4>
+                    <div class="grid gap-3">
+                        <div class="border text-card-foreground shadow bg-background/50 border-border rounded-sm">
+                            <div class="flex space-y-1.5 p-4 md:p-6 flex-row pb-2 md:pb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3 text-primary">
+                                    <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"></path>
+                                    <path d="M15 18H9"></path>
+                                    <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"></path>
+                                    <circle cx="17" cy="18" r="2"></circle>
+                                    <circle cx="7" cy="18" r="2"></circle>
+                                </svg>
+                                <h3 class="font-semibold leading-none tracking-tight text-foreground">Entrega automática</h3>
+                            </div>
+                            <div class="p-4 md:p-6 pt-0">
+                                <p class="text-sm text-muted-foreground">A entrega é feita instantaneamente depois do pagamento.</p>
+                            </div>
+                        </div>
+
+                        <div class="border text-card-foreground shadow bg-background/50 border-border rounded-sm">
+                            <div class="flex space-y-1.5 p-4 md:p-6 flex-row pb-2 md:pb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3 text-primary">
+                                    <line x1="12" x2="12" y1="2" y2="22"></line>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                                <h3 class="font-semibold leading-none tracking-tight text-foreground">Métodos de pagamentos</h3>
+                            </div>
+                            <div class="p-4 md:p-6 pt-0 flex flex-wrap items-center gap-3">
+                                <img src="https://cdn.mginex.com/static/images/payment-methods/pix.svg" alt="Pix" width="25" height="25">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Description -->
+            <div class="mt-6 md:mt-8 w-full">
+                <h4 class="text-lg font-medium mb-2 text-foreground">Descrição</h4>
+                <div class="border text-card-foreground shadow bg-background/50 border-border rounded-sm p-4 md:p-6">
+                    <div id="productDescription" class="text-foreground text-sm md:text-base space-y-4"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/auth.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/cart.js"></script>
+    <script>
+        let currentProduct = null;
+
+        function loadProduct() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            
+            if (!productId) {
+                window.location.href = '/';
+                return;
+            }
+
+            currentProduct = products.getById(productId);
+            if (!currentProduct) {
+                window.location.href = '/';
+                return;
+            }
+
+            // Atualiza título da página
+            document.title = `${currentProduct.title} - CARNAVALBUX`;
+
+            // Atualiza informações do produto
+            document.getElementById('productImage').src = currentProduct.image;
+            document.getElementById('productImage').alt = currentProduct.title;
+            document.getElementById('productTitle').textContent = currentProduct.title;
+            document.getElementById('productPrice').textContent = `R$ ${currentProduct.price.toFixed(2)}`;
+
+            // Atualiza descrição
+            document.getElementById('productDescription').innerHTML = `
+                📦 Conteúdo deste produto:<br><br>
+                ┏━━━━━━━━━━━━━━━━━<br>
+                💰・${currentProduct.title} (ENTREGA IMEDIATA)<br>
+                🔒・Compra 100% segura e transparente<br>
+                ┗━━━━━━━━━━━━━━━━━<br><br>
+                📋 Como funciona:<br>
+                1️⃣ Após a confirmação do pagamento, solicitaremos seu nome de usuário no Roblox para efetuar a entrega.<br>
+                2️⃣ Seus Robux serão enviados rapidamente, com total segurança.<br><br>
+                🔎 Acompanhe seus Robux pendentes:<br>
+                <a href="https://www.roblox.com/transactions" class="font-medium text-primary hover:underline underline-offset-4" target="_blank">https://www.roblox.com/transactions</a><br><br>
+                📞 Dúvidas? Nossa equipe de atendimento está pronta para ajudar! Fale conosco pelas redes sociais e tenha suporte completo.<br><br>
+                ⭐ Avaliações dos Nossos Clientes:<br><br>
+                <div class="space-y-4 mt-2">
+                    <div class="border border-primary/20 rounded-lg p-4 bg-primary/5">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-primary">★★★★★</span>
+                            <span class="text-sm text-muted-foreground">há 2 minutos</span>
+                        </div>
+                        <p class="text-foreground">"Comprei 1000 Robux e recebi em menos de 1 minuto! Site super confiável, já é a terceira vez que compro aqui. Preço muito mais barato que na loja oficial!"</p>
+                        <p class="text-sm text-primary mt-1">- João Gabriel</p>
+                    </div>
+
+                    <div class="border border-primary/20 rounded-lg p-4 bg-primary/5">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-primary">★★★★★</span>
+                            <span class="text-sm text-muted-foreground">há 15 minutos</span>
+                        </div>
+                        <p class="text-foreground">"Melhor site para comprar Robux! Entrega instantânea, suporte excelente e preços imbatíveis. Recomendo muito, podem confiar!"</p>
+                        <p class="text-sm text-primary mt-1">- Maria Eduarda</p>
+                    </div>
+
+                    <div class="border border-primary/20 rounded-lg p-4 bg-primary/5">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-primary">★★★★★</span>
+                            <span class="text-sm text-muted-foreground">há 1 hora</span>
+                        </div>
+                        <p class="text-foreground">"Comprei com um pouco de receio no início, mas me surpreendi! Entrega super rápida, preço justo e atendimento nota 10. Já indiquei para todos os meus amigos!"</p>
+                        <p class="text-sm text-primary mt-1">- Pedro Henrique</p>
+                    </div>
+
+                    <div class="border border-primary/20 rounded-lg p-4 bg-primary/5">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-primary">★★★★★</span>
+                            <span class="text-sm text-muted-foreground">há 3 horas</span>
+                        </div>
+                        <p class="text-foreground">"Nunca vi um site tão profissional para comprar Robux! Sistema automático perfeito, pagamento via PIX super prático e os Robux caem na hora na conta. Parabéns pelo trabalho!"</p>
+                        <p class="text-sm text-primary mt-1">- Ana Beatriz</p>
+                    </div>
+                </div>
+                <br>
+                🎉 CarnavalBux - A loja mais confiável de Robux do Brasil!
+            `;
+        }
+
+        function addToCart() {
+            if (!auth.isAuthenticated()) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            cart.addItem(currentProduct.id);
+            updateCartCount();
+            window.location.href = 'cart.html';
+        }
+
+        function updateCartCount() {
+            const count = cart.getCount();
+            document.getElementById('cartCount').textContent = count;
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProduct();
+            updateCartCount();
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - CARNAVALBUX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/monitor.js"></script>
+    <style>
+        :root {
+            --primary: #3D8A0C;
+            --background: #18181b;
+            --foreground: #fafafa;
+            --border: #27272a;
+            --muted: #71717a;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--foreground);
+        }
+
+        #loginContainer {
+            display: flex;
+        }
+
+        #dashboardContainer {
+            display: none;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Login -->
+    <div id="loginContainer" class="login-container active flex items-center justify-center min-h-screen p-4">
+        <div class="w-full max-w-md space-y-8 bg-zinc-900 p-6 rounded-lg border border-zinc-800">
+            <div class="text-center">
+                <img src="../img/logocarnaval.png" alt="CARNAVALBUX" class="h-12 mx-auto mb-4">
+                <h2 class="text-2xl font-bold">Painel Administrativo</h2>
+                <p class="text-zinc-400 text-sm mt-2">Faça login para acessar o painel</p>
+            </div>
+            
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Usuário</label>
+                    <input type="text" id="username" class="w-full p-2 rounded bg-zinc-800 border border-zinc-700 text-white" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-2">Senha</label>
+                    <input type="password" id="password" class="w-full p-2 rounded bg-zinc-800 border border-zinc-700 text-white" required>
+                </div>
+
+                <button type="submit" class="w-full bg-primary text-white py-2 rounded hover:bg-primary/90 transition-colors">
+                    Entrar
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboardContainer" class="dashboard-container">
+        <div class="flex h-screen bg-zinc-900">
+            <!-- Sidebar -->
+            <div class="w-64 bg-zinc-800 border-r border-zinc-700 p-4">
+                <img src="../img/logocarnaval.png" alt="CARNAVALBUX" class="h-8 mb-8">
+                
+                <nav class="space-y-2">
+                    <button onclick="showTab('overview')" class="w-full text-left p-2 rounded hover:bg-zinc-700 transition-colors">
+                        📊 Visão Geral
+                    </button>
+                    <button onclick="showTab('domains')" class="w-full text-left p-2 rounded hover:bg-zinc-700 transition-colors">
+                        🌐 Domínios Ativos
+                    </button>
+                    <button onclick="showTab('settings')" class="w-full text-left p-2 rounded hover:bg-zinc-700 transition-colors">
+                        ⚙️ Configurações
+                    </button>
+                </nav>
+
+                <button onclick="logout()" class="absolute bottom-4 left-4 text-red-500 hover:text-red-400 transition-colors">
+                    Sair
+                </button>
+            </div>
+
+            <!-- Content -->
+            <div class="flex-1 p-8 overflow-auto">
+                <!-- Overview Tab -->
+                <div id="overviewTab" class="tab-content active space-y-6">
+                    <h2 class="text-2xl font-bold mb-6">Visão Geral</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-zinc-800 p-4 rounded-lg border border-zinc-700">
+                            <h3 class="text-lg font-medium mb-2">Acessos Hoje</h3>
+                            <p id="todayVisits" class="text-3xl font-bold text-primary">0</p>
+                        </div>
+                        
+                        <div class="bg-zinc-800 p-4 rounded-lg border border-zinc-700">
+                            <h3 class="text-lg font-medium mb-2">Total de Vendas</h3>
+                            <p id="totalSales" class="text-3xl font-bold text-primary">0</p>
+                        </div>
+                        
+                        <div class="bg-zinc-800 p-4 rounded-lg border border-zinc-700">
+                            <h3 class="text-lg font-medium mb-2">Faturamento Total</h3>
+                            <p id="totalRevenue" class="text-3xl font-bold text-primary">R$ 0,00</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-zinc-800 p-4 rounded-lg border border-zinc-700">
+                        <h3 class="text-lg font-medium mb-4">Últimas Vendas</h3>
+                        <div id="recentSales" class="space-y-2">
+                            <!-- Recent sales will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Domains Tab -->
+                <div id="domainsTab" class="tab-content hidden space-y-6">
+                    <h2 class="text-2xl font-bold mb-6">Domínios Ativos</h2>
+                    
+                    <div class="bg-zinc-800 p-4 rounded-lg border border-zinc-700">
+                        <div id="activeDomainsList" class="space-y-4">
+                            <!-- Active domains will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div id="settingsTab" class="tab-content hidden space-y-6">
+                    <h2 class="text-2xl font-bold mb-6">Configurações</h2>
+                    
+                    <div class="bg-zinc-800 p-6 rounded-lg border border-zinc-700">
+                        <h3 class="text-lg font-medium mb-4">Configurações de Pagamento</h3>
+                        
+                        <form id="settingsForm" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Token da API</label>
+                                <input type="text" id="apiToken" class="w-full p-2 rounded bg-zinc-900 border border-zinc-700" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Webhook do Discord</label>
+                                <input type="url" id="webhookUrl" class="w-full p-2 rounded bg-zinc-900 border border-zinc-700" required>
+                            </div>
+
+                            <button type="submit" class="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90 transition-colors">
+                                Salvar Alterações
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Credenciais
+        const ADMIN_USER = 'luks';
+        const ADMIN_PASS = '1875';
+
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === ADMIN_USER && password === ADMIN_PASS) {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('dashboardContainer').style.display = 'block';
+                loadDashboardData();
+            } else {
+                alert('Credenciais inválidas!');
+            }
+        });
+
+        // Logout
+        function logout() {
+            document.getElementById('dashboardContainer').style.display = 'none';
+            document.getElementById('loginContainer').style.display = 'flex';
+        }
+
+        // Navegação entre tabs
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.getElementById(tabName + 'Tab').classList.remove('hidden');
+        }
+
+        // Carrega dados do dashboard
+        function loadDashboardData() {
+            const stats = monitor.getStats();
+            
+            // Atualiza contadores
+            document.getElementById('todayVisits').textContent = stats.visits.today.toLocaleString();
+            document.getElementById('totalSales').textContent = stats.sales.count.toLocaleString();
+            document.getElementById('totalRevenue').textContent = `R$ ${stats.sales.total.toFixed(2)}`;
+
+            // Atualiza lista de vendas recentes
+            const salesList = document.getElementById('recentSales');
+            salesList.innerHTML = stats.sales.history.map(sale => `
+                <div class="flex items-center justify-between p-3 bg-zinc-900 rounded">
+                    <div>
+                        <h4 class="font-medium">${sale.productName}</h4>
+                        <p class="text-sm text-zinc-400">R$ ${sale.amount.toFixed(2)}</p>
+                    </div>
+                    <span class="text-sm text-zinc-400">${new Date(sale.date).toLocaleString('pt-BR')}</span>
+                </div>
+            `).join('');
+
+            // Atualiza lista de domínios
+            const domainsList = document.getElementById('activeDomainsList');
+            domainsList.innerHTML = stats.domains.map(([domain, info]) => `
+                <div class="flex items-center justify-between p-3 bg-zinc-900 rounded">
+                    <div>
+                        <h4 class="font-medium">${domain}</h4>
+                        <p class="text-sm text-zinc-400">IP: ${info.ip}</p>
+                    </div>
+                    <span class="text-sm text-zinc-400">Último acesso: ${new Date(info.lastSeen).toLocaleString('pt-BR')}</span>
+                </div>
+            `).join('');
+
+            // Carrega configurações salvas
+            const config = localStorage.getItem('adminConfig');
+            if (config) {
+                const { apiToken, webhookUrl } = JSON.parse(config);
+                document.getElementById('apiToken').value = apiToken || '';
+                document.getElementById('webhookUrl').value = webhookUrl || '';
+            }
+        }
+
+        // Salvar configurações
+        document.getElementById('settingsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const apiToken = document.getElementById('apiToken').value;
+            const webhookUrl = document.getElementById('webhookUrl').value;
+
+            // Salva configurações
+            const config = { apiToken, webhookUrl };
+            localStorage.setItem('adminConfig', JSON.stringify(config));
+
+            // Atualiza webhook no monitor
+            monitor.webhookUrl = webhookUrl;
+
+            alert('Configurações salvas com sucesso!');
+        });
+    </script>
+</body>
+</html> 
