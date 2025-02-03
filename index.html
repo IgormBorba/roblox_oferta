@@ -6,8 +6,10 @@
     <title>CARNAVALBUX - A loja N°1 de Robux no Brasil!</title>
     <link rel="icon" type="image/png" href="img/logocarnaval.png">
     <script>
-        // Configuração do caminho base
-        const baseUrl = window.location.pathname.includes('/public/') ? '/public' : '';
+        // Define a baseUrl para o ambiente atual
+        const baseUrl = window.location.pathname.includes('/index.html') 
+            ? '.' 
+            : window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
