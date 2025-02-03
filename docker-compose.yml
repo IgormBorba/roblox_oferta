@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: carnavalbux_web
+    ports:
+      - "80:80"
+    volumes:
+      - .:/usr/local/apache2/htdocs/
+    restart: always
+    environment:
+      - APACHE_RUN_USER=www-data
+      - APACHE_RUN_GROUP=www-data 
