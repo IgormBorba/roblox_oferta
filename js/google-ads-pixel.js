@@ -29,6 +29,13 @@ const googleAdsPixel = {
             phone_number: user?.phone || ''
         };
 
+        // Formata os dados do usuário para o Google Ads
+        const formattedUserData = {
+            email_address: userData.email,
+            name: userData.name,
+            phone_number: userData.phone || userData.phone_number || ''
+        };
+
         // Adiciona os dados do cliente ao dataLayer para enhanced conversions
         if (window.dataLayer) {
             window.dataLayer.push({
@@ -47,6 +54,7 @@ const googleAdsPixel = {
                 'event': 'purchase_complete',
                 'transaction_id': transactionId,
                 'value': value,
+                'transaction_type': 'purchase',
                 'user_email': userData.email
             });
         }
@@ -58,11 +66,7 @@ const googleAdsPixel = {
             'currency': 'BRL',
             'transaction_id': transactionId,
             'transaction_type': 'purchase',
-            'user_data': {
-                'email_address': userData.email,
-                'name': userData.name,
-                'phone_number': userData.phone || userData.phone_number || ''
-            }
+            'user_data': formattedUserData
         });
         
         // Registra conversão no segundo pixel
@@ -72,18 +76,14 @@ const googleAdsPixel = {
             'currency': 'BRL',
             'transaction_id': transactionId,
             'transaction_type': 'purchase',
-            'user_data': {
-                'email_address': userData.email,
-                'name': userData.name,
-                'phone_number': userData.phone || userData.phone_number || ''
-            }
+            'user_data': formattedUserData
         });
 
         console.log('Conversão registrada nos pixels do Google Ads:', {
             value,
             transactionId,
-            userData,
-            transaction_type: 'purchase'
+            transaction_type: 'purchase',
+            user_data: formattedUserData
         });
     },
 
@@ -94,10 +94,21 @@ const googleAdsPixel = {
         // Dados do cliente (se disponíveis)
         const user = auth.getCurrentUser();
         const customerData = user ? {
-            email: user.email,
+            email_address: user.email,
             name: user.name,
             phone_number: user.phone || ''
         } : {};
+
+        // Itens do carrinho
+        const cartItems = cart.getItems().map(item => {
+            const product = products.getById(item.id);
+            return {
+                'id': product.id,
+                'name': product.title,
+                'quantity': item.quantity,
+                'price': product.price
+            };
+        });
 
         // Adiciona os dados do cliente ao dataLayer
         if (window.dataLayer) {
@@ -105,44 +116,39 @@ const googleAdsPixel = {
                 'event': 'begin_checkout',
                 'value': cartValue,
                 'currency': 'BRL',
+                'transaction_type': 'purchase',
                 'user_id': user?.id || '',
                 'user_email': user?.email || '',
                 'user_name': user?.name || '',
-                'items': cart.getItems().map(item => {
-                    const product = products.getById(item.id);
-                    return {
-                        'id': product.id,
-                        'name': product.title,
-                        'quantity': item.quantity,
-                        'price': product.price
-                    };
-                })
+                'items': cartItems
             });
 
             console.log('Dados de checkout enviados para o dataLayer:', {
                 'event': 'begin_checkout',
                 'value': cartValue,
+                'transaction_type': 'purchase',
                 'user_email': user?.email
             });
         }
 
+        // Envia evento para o Google Ads
         gtag('event', 'begin_checkout', {
+            'send_to': this.pixelIds.pixel1,
             'value': cartValue,
             'currency': 'BRL',
-            'user_data': {
-                'email_address': customerData.email,
-                'name': customerData.name,
-                'phone_number': customerData.phone_number
-            },
-            'items': cart.getItems().map(item => {
-                const product = products.getById(item.id);
-                return {
-                    'id': product.id,
-                    'name': product.title,
-                    'quantity': item.quantity,
-                    'price': product.price
-                };
-            })
+            'transaction_type': 'purchase',
+            'user_data': customerData,
+            'items': cartItems
+        });
+
+        // Envia evento para o segundo pixel
+        gtag('event', 'begin_checkout', {
+            'send_to': this.pixelIds.pixel2,
+            'value': cartValue,
+            'currency': 'BRL',
+            'transaction_type': 'purchase',
+            'user_data': customerData,
+            'items': cartItems
         });
     },
 
@@ -155,11 +161,19 @@ const googleAdsPixel = {
 
         // Dados do cliente (se disponíveis)
         const user = auth.getCurrentUser();
-        const customerData = user ? {
-            email: user.email,
+        const formattedUserData = user ? {
+            email_address: user.email,
             name: user.name,
             phone_number: user.phone || ''
         } : {};
+
+        // Item do carrinho
+        const cartItem = {
+            'id': product.id,
+            'name': product.title,
+            'quantity': quantity,
+            'price': product.price
+        };
 
         // Adiciona os dados do cliente ao dataLayer
         if (window.dataLayer) {
@@ -167,6 +181,7 @@ const googleAdsPixel = {
                 'event': 'add_to_cart',
                 'value': product.price * quantity,
                 'currency': 'BRL',
+                'transaction_type': 'purchase',
                 'user_id': user?.id || '',
                 'user_email': user?.email || '',
                 'user_name': user?.name || '',
@@ -179,24 +194,29 @@ const googleAdsPixel = {
             console.log('Dados de adição ao carrinho enviados para o dataLayer:', {
                 'event': 'add_to_cart',
                 'product_name': product.title,
+                'transaction_type': 'purchase',
                 'user_email': user?.email
             });
         }
 
+        // Envia evento para o primeiro pixel
         gtag('event', 'add_to_cart', {
+            'send_to': this.pixelIds.pixel1,
             'value': product.price * quantity,
             'currency': 'BRL',
-            'user_data': {
-                'email_address': customerData.email,
-                'name': customerData.name,
-                'phone_number': customerData.phone_number
-            },
-            'items': [{
-                'id': product.id,
-                'name': product.title,
-                'quantity': quantity,
-                'price': product.price
-            }]
+            'transaction_type': 'purchase',
+            'user_data': formattedUserData,
+            'items': [cartItem]
+        });
+
+        // Envia evento para o segundo pixel
+        gtag('event', 'add_to_cart', {
+            'send_to': this.pixelIds.pixel2,
+            'value': product.price * quantity,
+            'currency': 'BRL',
+            'transaction_type': 'purchase',
+            'user_data': formattedUserData,
+            'items': [cartItem]
         });
     }
 }; 
