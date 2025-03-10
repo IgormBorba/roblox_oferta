@@ -13,6 +13,24 @@ const payment = {
                 console.error("Erro ao registrar venda no monitor:", error);
             }
         }
+        
+        // Registra a conversão nos pixels do Google Ads
+        if (typeof googleAdsPixel !== 'undefined') {
+            try {
+                // Gera um ID de transação único
+                const transactionId = 'TX-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+                
+                // Envia dados para os pixels
+                googleAdsPixel.trackConversion({
+                    value: valor,
+                    transactionId: transactionId
+                });
+                
+                console.log("Conversão registrada com sucesso nos pixels do Google Ads");
+            } catch (error) {
+                console.error("Erro ao registrar conversão nos pixels do Google Ads:", error);
+            }
+        }
     },
 
     // Funções auxiliares para gerar dados aleatórios

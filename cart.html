@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrinho - CARNAVALBUX</title>
     <link rel="icon" type="image/png" href="img/logocarnaval.png">
+    <!-- Google Tag Manager -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'AW-16885157817');
+        gtag('config', 'AW-16906832004');
+    </script>
+    <!-- End Google Tag Manager -->
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16885157817"></script>
+    <!-- End Google Analytics -->
     <script>
         // Define a baseUrl para o ambiente atual
         const baseUrl = window.location.pathname.includes('/index.html') 
@@ -910,6 +922,7 @@
     <script src="js/cart.js"></script>
     <script src="js/monitor.js"></script>
     <script src="js/payment.js"></script>
+    <script src="js/google-ads-pixel.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
         // Atualiza interface baseado no estado de autenticação
@@ -1044,6 +1057,16 @@
             if (cartItems.length === 0) {
                 alert('Adicione produtos ao carrinho para finalizar a compra.');
                 return;
+            }
+
+            // Rastreia o início do checkout no pixel do Google Ads
+            if (typeof googleAdsPixel !== 'undefined') {
+                try {
+                    const cartTotal = cart.getTotal();
+                    googleAdsPixel.trackBeginCheckout(cartTotal);
+                } catch (error) {
+                    console.error("Erro ao rastrear início do checkout:", error);
+                }
             }
 
             // Pega o primeiro item do carrinho para gerar o pagamento

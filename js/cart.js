@@ -27,6 +27,15 @@ const cart = {
         }
 
         localStorage.setItem(this.CART_KEY, JSON.stringify(items));
+        
+        // Registra evento de adição ao carrinho no pixel do Google Ads
+        if (typeof googleAdsPixel !== 'undefined') {
+            try {
+                googleAdsPixel.trackAddToCart(productId, quantity);
+            } catch (error) {
+                console.error("Erro ao registrar adição ao carrinho no pixel:", error);
+            }
+        }
     },
 
     // Remove um item do carrinho
