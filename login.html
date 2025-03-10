@@ -4,18 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - CARNAVALBUX</title>
-    <!-- Google Tag Manager -->
+    <!-- Inicialização do dataLayer antes de qualquer script -->
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
+    </script>
+    <!-- Google Tag Manager -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16885157817"></script>
+    <script>
         gtag('js', new Date());
         gtag('config', 'AW-16885157817');
         gtag('config', 'AW-16906832004');
     </script>
     <!-- End Google Tag Manager -->
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16885157817"></script>
-    <!-- End Google Analytics -->
     <script>
         // Configuração do caminho base
         const baseUrl = window.location.pathname.includes('/public/') ? '/public' : '';
@@ -139,22 +140,38 @@
                         const user = auth.getCurrentUser();
                         
                         // Envia os dados do usuário para o dataLayer
-                        if (window.dataLayer && user) {
+                        if (user) {
+                            // Primeiro, enviamos um evento personalizado para o dataLayer
                             window.dataLayer.push({
                                 'event': 'login_success',
-                                'user_data': {
-                                    'email': user.email,
-                                    'name': user.name,
-                                    'phone_number': user.phone || ''
-                                }
+                                'user_id': user.id || '',
+                                'user_email': user.email || '',
+                                'user_name': user.name || ''
                             });
                             
-                            // Registra o evento de login no Google Ads
+                            console.log('Dados enviados para o dataLayer:', {
+                                'event': 'login_success',
+                                'user_id': user.id || '',
+                                'user_email': user.email || '',
+                                'user_name': user.name || ''
+                            });
+                            
+                            // Em seguida, enviamos o evento diretamente para o Google Ads
                             if (typeof gtag === 'function') {
                                 gtag('event', 'login', {
                                     'method': 'email',
                                     'user_data': {
-                                        'email': user.email,
+                                        'email_address': user.email,
+                                        'name': user.name,
+                                        'phone_number': user.phone || ''
+                                    }
+                                });
+                                
+                                console.log('Evento enviado para o Google Ads:', {
+                                    'event': 'login',
+                                    'method': 'email',
+                                    'user_data': {
+                                        'email_address': user.email,
                                         'name': user.name,
                                         'phone_number': user.phone || ''
                                     }
@@ -162,7 +179,10 @@
                             }
                         }
                         
-                        window.location.href = baseUrl + '/index.html';
+                        // Redireciona após um pequeno delay para garantir que os eventos sejam enviados
+                        setTimeout(function() {
+                            window.location.href = baseUrl + '/index.html';
+                        }, 500);
                     } else {
                         alert('Email ou senha inválidos');
                     }

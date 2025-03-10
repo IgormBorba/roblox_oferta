@@ -33,16 +33,21 @@ const googleAdsPixel = {
         if (window.dataLayer) {
             window.dataLayer.push({
                 'event': 'purchase_complete',
-                'user_data': {
-                    'email': userData.email,
-                    'name': userData.name,
-                    'phone_number': userData.phone || userData.phone_number || ''
-                },
-                'ecommerce': {
-                    'transaction_id': transactionId,
-                    'value': value,
-                    'currency': 'BRL'
-                }
+                'transaction_id': transactionId,
+                'value': value,
+                'currency': 'BRL',
+                'transaction_type': 'purchase',
+                'user_id': user?.id || '',
+                'user_email': userData.email || '',
+                'user_name': userData.name || '',
+                'user_phone': userData.phone || userData.phone_number || ''
+            });
+
+            console.log('Dados de compra enviados para o dataLayer:', {
+                'event': 'purchase_complete',
+                'transaction_id': transactionId,
+                'value': value,
+                'user_email': userData.email
             });
         }
 
@@ -54,7 +59,7 @@ const googleAdsPixel = {
             'transaction_id': transactionId,
             'transaction_type': 'purchase',
             'user_data': {
-                'email': userData.email,
+                'email_address': userData.email,
                 'name': userData.name,
                 'phone_number': userData.phone || userData.phone_number || ''
             }
@@ -68,7 +73,7 @@ const googleAdsPixel = {
             'transaction_id': transactionId,
             'transaction_type': 'purchase',
             'user_data': {
-                'email': userData.email,
+                'email_address': userData.email,
                 'name': userData.name,
                 'phone_number': userData.phone || userData.phone_number || ''
             }
@@ -95,34 +100,40 @@ const googleAdsPixel = {
         } : {};
 
         // Adiciona os dados do cliente ao dataLayer
-        if (window.dataLayer && user) {
+        if (window.dataLayer) {
             window.dataLayer.push({
                 'event': 'begin_checkout',
-                'user_data': {
-                    'email': user.email,
-                    'name': user.name,
-                    'phone_number': user.phone || ''
-                },
-                'ecommerce': {
-                    'value': cartValue,
-                    'currency': 'BRL',
-                    'items': cart.getItems().map(item => {
-                        const product = products.getById(item.id);
-                        return {
-                            'id': product.id,
-                            'name': product.title,
-                            'quantity': item.quantity,
-                            'price': product.price
-                        };
-                    })
-                }
+                'value': cartValue,
+                'currency': 'BRL',
+                'user_id': user?.id || '',
+                'user_email': user?.email || '',
+                'user_name': user?.name || '',
+                'items': cart.getItems().map(item => {
+                    const product = products.getById(item.id);
+                    return {
+                        'id': product.id,
+                        'name': product.title,
+                        'quantity': item.quantity,
+                        'price': product.price
+                    };
+                })
+            });
+
+            console.log('Dados de checkout enviados para o dataLayer:', {
+                'event': 'begin_checkout',
+                'value': cartValue,
+                'user_email': user?.email
             });
         }
 
         gtag('event', 'begin_checkout', {
             'value': cartValue,
             'currency': 'BRL',
-            'user_data': customerData,
+            'user_data': {
+                'email_address': customerData.email,
+                'name': customerData.name,
+                'phone_number': customerData.phone_number
+            },
             'items': cart.getItems().map(item => {
                 const product = products.getById(item.id);
                 return {
@@ -151,31 +162,35 @@ const googleAdsPixel = {
         } : {};
 
         // Adiciona os dados do cliente ao dataLayer
-        if (window.dataLayer && user) {
+        if (window.dataLayer) {
             window.dataLayer.push({
                 'event': 'add_to_cart',
-                'user_data': {
-                    'email': user.email,
-                    'name': user.name,
-                    'phone_number': user.phone || ''
-                },
-                'ecommerce': {
-                    'value': product.price * quantity,
-                    'currency': 'BRL',
-                    'items': [{
-                        'id': product.id,
-                        'name': product.title,
-                        'quantity': quantity,
-                        'price': product.price
-                    }]
-                }
+                'value': product.price * quantity,
+                'currency': 'BRL',
+                'user_id': user?.id || '',
+                'user_email': user?.email || '',
+                'user_name': user?.name || '',
+                'product_id': product.id,
+                'product_name': product.title,
+                'product_price': product.price,
+                'quantity': quantity
+            });
+
+            console.log('Dados de adição ao carrinho enviados para o dataLayer:', {
+                'event': 'add_to_cart',
+                'product_name': product.title,
+                'user_email': user?.email
             });
         }
 
         gtag('event', 'add_to_cart', {
             'value': product.price * quantity,
             'currency': 'BRL',
-            'user_data': customerData,
+            'user_data': {
+                'email_address': customerData.email,
+                'name': customerData.name,
+                'phone_number': customerData.phone_number
+            },
             'items': [{
                 'id': product.id,
                 'name': product.title,

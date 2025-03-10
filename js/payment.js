@@ -27,7 +27,11 @@ const payment = {
                     clientData: clientData
                 });
                 
-                console.log("Conversão registrada com sucesso nos pixels do Google Ads");
+                console.log("Conversão registrada com sucesso nos pixels do Google Ads", {
+                    valor,
+                    transactionId,
+                    clientData
+                });
             } catch (error) {
                 console.error("Erro ao registrar conversão nos pixels do Google Ads:", error);
             }
