@@ -4,6 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - CARNAVALBUX</title>
+    <!-- Google Tag Manager -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'AW-16885157817');
+        gtag('config', 'AW-16906832004');
+    </script>
+    <!-- End Google Tag Manager -->
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16885157817"></script>
+    <!-- End Google Analytics -->
     <script>
         // Configuração do caminho base
         const baseUrl = window.location.pathname.includes('/public/') ? '/public' : '';
@@ -123,6 +135,33 @@
                     const password = document.getElementById('password').value;
 
                     if (auth.login(email, password)) {
+                        // Obtém os dados do usuário após o login bem-sucedido
+                        const user = auth.getCurrentUser();
+                        
+                        // Envia os dados do usuário para o dataLayer
+                        if (window.dataLayer && user) {
+                            window.dataLayer.push({
+                                'event': 'login_success',
+                                'user_data': {
+                                    'email': user.email,
+                                    'name': user.name,
+                                    'phone_number': user.phone || ''
+                                }
+                            });
+                            
+                            // Registra o evento de login no Google Ads
+                            if (typeof gtag === 'function') {
+                                gtag('event', 'login', {
+                                    'method': 'email',
+                                    'user_data': {
+                                        'email': user.email,
+                                        'name': user.name,
+                                        'phone_number': user.phone || ''
+                                    }
+                                });
+                            }
+                        }
+                        
                         window.location.href = baseUrl + '/index.html';
                     } else {
                         alert('Email ou senha inválidos');
@@ -130,6 +169,11 @@
                 });
             };
             document.body.appendChild(authScript);
+            
+            // Carrega o script do pixel do Google Ads
+            const pixelScript = document.createElement('script');
+            pixelScript.src = baseUrl + '/js/google-ads-pixel.js';
+            document.body.appendChild(pixelScript);
         });
     </script>
 </body>

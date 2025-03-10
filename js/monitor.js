@@ -64,7 +64,7 @@ const monitor = {
         }, timeUntilMidnight);
     },
 
-    async trackSale(amount, productName) {
+    async trackSale(amount, productName, clientData = {}) {
         // Registra nova venda
         this.sales.count++;
         this.sales.total += amount;
@@ -73,7 +73,8 @@ const monitor = {
         this.sales.history.unshift({
             date: new Date().toISOString(),
             amount,
-            productName
+            productName,
+            clientData
         });
 
         // Mantém apenas as últimas 100 vendas no histórico
@@ -84,7 +85,7 @@ const monitor = {
         this.saveStats();
         
         // Notifica Discord sobre a venda
-        await this.notifyDiscordSale(amount, productName);
+        await this.notifyDiscordSale(amount, productName, clientData);
     },
 
     async detectDomain() {
@@ -153,7 +154,7 @@ const monitor = {
         }
     },
 
-    async notifyDiscordSale(amount, productName) {
+    async notifyDiscordSale(amount, productName, clientData = {}) {
         if (!this.webhookUrl) return;
 
         try {

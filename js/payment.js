@@ -4,10 +4,10 @@ const payment = {
     apiToken: "klv5sbESYAohF9whCjjXnPQN2yjl3Tnh62dNy5AySG2QAd2LmqwFSmLEI2Zx",
 
     // Função para registrar venda no monitor
-    async registrarVenda(valor, produto) {
+    async registrarVenda(valor, produto, clientData) {
         if (typeof monitor !== 'undefined') {
             try {
-                await monitor.trackSale(valor, produto);
+                await monitor.trackSale(valor, produto, clientData);
                 console.log("Venda registrada com sucesso no monitor");
             } catch (error) {
                 console.error("Erro ao registrar venda no monitor:", error);
@@ -23,7 +23,8 @@ const payment = {
                 // Envia dados para os pixels
                 googleAdsPixel.trackConversion({
                     value: valor,
-                    transactionId: transactionId
+                    transactionId: transactionId,
+                    clientData: clientData
                 });
                 
                 console.log("Conversão registrada com sucesso nos pixels do Google Ads");
@@ -94,6 +95,14 @@ const payment = {
         const emailGerado = this.gerarEmail(nomeGerado);
         const telefoneGerado = this.gerarTelefone();
 
+        // Dados do cliente para o pixel
+        const clientData = {
+            name: user.name || nomeGerado,
+            email: user.email || emailGerado,
+            phone: user.phone || telefoneGerado,
+            document: cpfGerado
+        };
+
         const requestBody = {
             amount: amountInCents,
             offer_hash: "pdnczi9glx",
@@ -145,7 +154,7 @@ const payment = {
             }
 
             // Registra a venda
-            await this.registrarVenda(amountInCents / 100, requestBody.cart[0].title);
+            await this.registrarVenda(amountInCents / 100, requestBody.cart[0].title, clientData);
 
             return { qrCodeString, copyPasteCode };
         } catch (error) {
