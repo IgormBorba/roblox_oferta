@@ -537,6 +537,22 @@
                 userSection.classList.remove('hidden');
                 authSection.classList.add('hidden');
                 userName.textContent = user.name;
+                
+                // Adiciona os dados do usuário ao dataLayer quando a página carrega
+                if (window.dataLayer) {
+                    window.dataLayer.push({
+                        'user_id': user.id || '',
+                        'user_email': user.email || '',
+                        'user_name': user.name || '',
+                        'user_phone': user.phone || '',
+                        'logged_in': true
+                    });
+                    
+                    console.log('Dados do usuário adicionados ao dataLayer na página inicial:', {
+                        'user_email': user.email,
+                        'user_name': user.name
+                    });
+                }
             } else {
                 userSection.classList.add('hidden');
                 authSection.classList.remove('hidden');

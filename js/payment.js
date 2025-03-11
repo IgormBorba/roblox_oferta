@@ -107,6 +107,30 @@ const payment = {
             document: cpfGerado
         };
 
+        // Adiciona evento diretamente ao dataLayer para garantir que transaction_type seja enviado
+        if (window.dataLayer) {
+            const transactionId = 'TX-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+            
+            window.dataLayer.push({
+                'event': 'purchase_initiated',
+                'transaction_id': transactionId,
+                'value': total,
+                'currency': 'BRL',
+                'transaction_type': 'purchase',
+                'user_id': user.id || '',
+                'user_email': user.email || '',
+                'user_name': user.name || '',
+                'user_phone': user.phone || ''
+            });
+            
+            console.log('Evento de início de compra enviado diretamente para o dataLayer:', {
+                'event': 'purchase_initiated',
+                'value': total,
+                'transaction_type': 'purchase',
+                'user_email': user.email
+            });
+        }
+
         const requestBody = {
             amount: amountInCents,
             offer_hash: "pdnczi9glx",

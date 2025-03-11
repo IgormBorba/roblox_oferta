@@ -157,20 +157,25 @@
                                 'event': 'login_success',
                                 'user_id': user.id || '',
                                 'user_email': user.email || '',
-                                'user_name': user.name || ''
+                                'user_name': user.name || '',
+                                'user_phone': user.phone || '',
+                                'transaction_type': 'purchase',
+                                'logged_in': true
                             });
                             
                             console.log('Dados enviados para o dataLayer:', {
                                 'event': 'login_success',
                                 'user_id': user.id || '',
                                 'user_email': user.email || '',
-                                'user_name': user.name || ''
+                                'user_name': user.name || '',
+                                'transaction_type': 'purchase'
                             });
                             
                             // Em seguida, enviamos o evento diretamente para o Google Ads
                             if (typeof gtag === 'function') {
                                 gtag('event', 'login', {
                                     'method': 'email',
+                                    'transaction_type': 'purchase',
                                     'user_data': {
                                         'email_address': user.email,
                                         'name': user.name,

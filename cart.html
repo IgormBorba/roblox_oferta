@@ -948,6 +948,22 @@
                 userSection.classList.remove('hidden');
                 authSection.classList.add('hidden');
                 userName.textContent = user.name;
+                
+                // Adiciona os dados do usuário ao dataLayer quando a página carrega
+                if (window.dataLayer) {
+                    window.dataLayer.push({
+                        'user_id': user.id || '',
+                        'user_email': user.email || '',
+                        'user_name': user.name || '',
+                        'user_phone': user.phone || '',
+                        'logged_in': true
+                    });
+                    
+                    console.log('Dados do usuário adicionados ao dataLayer na página do carrinho:', {
+                        'user_email': user.email,
+                        'user_name': user.name
+                    });
+                }
             } else {
                 userSection.classList.add('hidden');
                 authSection.classList.remove('hidden');
@@ -1071,11 +1087,36 @@
                 return;
             }
 
+            // Obtém os dados do usuário
+            const user = auth.getCurrentUser();
+            
             // Rastreia o início do checkout no pixel do Google Ads
             if (typeof googleAdsPixel !== 'undefined') {
                 try {
                     const cartTotal = cart.getTotal();
                     googleAdsPixel.trackBeginCheckout(cartTotal);
+                    
+                    // Adiciona evento diretamente ao dataLayer para garantir que transaction_type seja enviado
+                    if (window.dataLayer && user) {
+                        window.dataLayer.push({
+                            'event': 'begin_checkout',
+                            'value': cartTotal,
+                            'currency': 'BRL',
+                            'transaction_type': 'purchase',
+                            'user_id': user.id || '',
+                            'user_email': user.email || '',
+                            'user_name': user.name || '',
+                            'user_phone': user.phone || '',
+                            'cart_items': cartItems.length
+                        });
+                        
+                        console.log('Evento de checkout enviado diretamente para o dataLayer:', {
+                            'event': 'begin_checkout',
+                            'value': cartTotal,
+                            'transaction_type': 'purchase',
+                            'user_email': user.email
+                        });
+                    }
                 } catch (error) {
                     console.error("Erro ao rastrear início do checkout:", error);
                 }

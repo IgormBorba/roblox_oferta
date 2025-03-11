@@ -15,6 +15,30 @@ const googleAdsPixel = {
         return true;
     },
 
+    // Obtém os dados do usuário atual
+    getUserData() {
+        const user = auth.getCurrentUser();
+        if (!user) return null;
+        
+        return {
+            user_id: user.id || '',
+            user_email: user.email || '',
+            user_name: user.name || '',
+            user_phone: user.phone || ''
+        };
+    },
+
+    // Formata os dados do usuário para o Google Ads
+    formatUserDataForAds(userData) {
+        if (!userData) return {};
+        
+        return {
+            email_address: userData.user_email,
+            name: userData.user_name,
+            phone_number: userData.user_phone
+        };
+    },
+
     // Envia evento de conversão para ambos os pixels
     trackConversion(transactionData) {
         if (!this.init()) return;
@@ -22,19 +46,15 @@ const googleAdsPixel = {
         const { value, transactionId, clientData } = transactionData;
         
         // Dados do cliente (se disponíveis)
-        const user = auth.getCurrentUser();
-        const userData = clientData || {
-            email: user?.email || '',
-            name: user?.name || '',
-            phone_number: user?.phone || ''
+        const userData = this.getUserData() || {
+            user_id: '',
+            user_email: clientData?.email || '',
+            user_name: clientData?.name || '',
+            user_phone: clientData?.phone || clientData?.phone_number || ''
         };
 
         // Formata os dados do usuário para o Google Ads
-        const formattedUserData = {
-            email_address: userData.email,
-            name: userData.name,
-            phone_number: userData.phone || userData.phone_number || ''
-        };
+        const formattedUserData = this.formatUserDataForAds(userData);
 
         // Adiciona os dados do cliente ao dataLayer para enhanced conversions
         if (window.dataLayer) {
@@ -44,10 +64,10 @@ const googleAdsPixel = {
                 'value': value,
                 'currency': 'BRL',
                 'transaction_type': 'purchase',
-                'user_id': user?.id || '',
-                'user_email': userData.email || '',
-                'user_name': userData.name || '',
-                'user_phone': userData.phone || userData.phone_number || ''
+                'user_id': userData.user_id,
+                'user_email': userData.user_email,
+                'user_name': userData.user_name,
+                'user_phone': userData.user_phone
             });
 
             console.log('Dados de compra enviados para o dataLayer:', {
@@ -55,7 +75,7 @@ const googleAdsPixel = {
                 'transaction_id': transactionId,
                 'value': value,
                 'transaction_type': 'purchase',
-                'user_email': userData.email
+                'user_email': userData.user_email
             });
         }
 
@@ -92,12 +112,8 @@ const googleAdsPixel = {
         if (!this.init()) return;
 
         // Dados do cliente (se disponíveis)
-        const user = auth.getCurrentUser();
-        const customerData = user ? {
-            email_address: user.email,
-            name: user.name,
-            phone_number: user.phone || ''
-        } : {};
+        const userData = this.getUserData();
+        const formattedUserData = this.formatUserDataForAds(userData);
 
         // Itens do carrinho
         const cartItems = cart.getItems().map(item => {
@@ -112,22 +128,31 @@ const googleAdsPixel = {
 
         // Adiciona os dados do cliente ao dataLayer
         if (window.dataLayer) {
-            window.dataLayer.push({
+            const dataLayerObject = {
                 'event': 'begin_checkout',
                 'value': cartValue,
                 'currency': 'BRL',
                 'transaction_type': 'purchase',
-                'user_id': user?.id || '',
-                'user_email': user?.email || '',
-                'user_name': user?.name || '',
                 'items': cartItems
-            });
+            };
+            
+            // Adiciona os dados do usuário se disponíveis
+            if (userData) {
+                Object.assign(dataLayerObject, {
+                    'user_id': userData.user_id,
+                    'user_email': userData.user_email,
+                    'user_name': userData.user_name,
+                    'user_phone': userData.user_phone
+                });
+            }
+            
+            window.dataLayer.push(dataLayerObject);
 
             console.log('Dados de checkout enviados para o dataLayer:', {
                 'event': 'begin_checkout',
                 'value': cartValue,
                 'transaction_type': 'purchase',
-                'user_email': user?.email
+                'user_email': userData?.user_email || 'não logado'
             });
         }
 
@@ -137,7 +162,7 @@ const googleAdsPixel = {
             'value': cartValue,
             'currency': 'BRL',
             'transaction_type': 'purchase',
-            'user_data': customerData,
+            'user_data': formattedUserData,
             'items': cartItems
         });
 
@@ -147,7 +172,7 @@ const googleAdsPixel = {
             'value': cartValue,
             'currency': 'BRL',
             'transaction_type': 'purchase',
-            'user_data': customerData,
+            'user_data': formattedUserData,
             'items': cartItems
         });
     },
@@ -160,12 +185,8 @@ const googleAdsPixel = {
         if (!product) return;
 
         // Dados do cliente (se disponíveis)
-        const user = auth.getCurrentUser();
-        const formattedUserData = user ? {
-            email_address: user.email,
-            name: user.name,
-            phone_number: user.phone || ''
-        } : {};
+        const userData = this.getUserData();
+        const formattedUserData = this.formatUserDataForAds(userData);
 
         // Item do carrinho
         const cartItem = {
@@ -177,25 +198,34 @@ const googleAdsPixel = {
 
         // Adiciona os dados do cliente ao dataLayer
         if (window.dataLayer) {
-            window.dataLayer.push({
+            const dataLayerObject = {
                 'event': 'add_to_cart',
                 'value': product.price * quantity,
                 'currency': 'BRL',
                 'transaction_type': 'purchase',
-                'user_id': user?.id || '',
-                'user_email': user?.email || '',
-                'user_name': user?.name || '',
                 'product_id': product.id,
                 'product_name': product.title,
                 'product_price': product.price,
                 'quantity': quantity
-            });
+            };
+            
+            // Adiciona os dados do usuário se disponíveis
+            if (userData) {
+                Object.assign(dataLayerObject, {
+                    'user_id': userData.user_id,
+                    'user_email': userData.user_email,
+                    'user_name': userData.user_name,
+                    'user_phone': userData.user_phone
+                });
+            }
+            
+            window.dataLayer.push(dataLayerObject);
 
             console.log('Dados de adição ao carrinho enviados para o dataLayer:', {
                 'event': 'add_to_cart',
                 'product_name': product.title,
                 'transaction_type': 'purchase',
-                'user_email': user?.email
+                'user_email': userData?.user_email || 'não logado'
             });
         }
 
