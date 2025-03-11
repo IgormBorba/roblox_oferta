@@ -7,8 +7,10 @@ Este documento explica como implementar novos pixels do Google Ads no sistema de
 1. [Visão Geral](#visão-geral)
 2. [Estrutura do Sistema](#estrutura-do-sistema)
 3. [Como Adicionar um Novo Pixel](#como-adicionar-um-novo-pixel)
-4. [Verificação da Implementação](#verificação-da-implementação)
-5. [Solução de Problemas](#solução-de-problemas)
+4. [Painel de Gerenciamento de Pixels](#painel-de-gerenciamento-de-pixels)
+5. [Configurações de Pagamento](#configurações-de-pagamento)
+6. [Verificação da Implementação](#verificação-da-implementação)
+7. [Solução de Problemas](#solução-de-problemas)
 
 ## Visão Geral
 
@@ -196,6 +198,116 @@ Se você estiver usando o Google Tag Manager, certifique-se de adicionar o novo 
 </script>
 <!-- End Google Ads Conversion Tracking -->
 ```
+
+## Painel de Gerenciamento de Pixels
+
+O sistema agora inclui um painel de administração para gerenciar os pixels do Google Ads. Este painel permite adicionar, editar e remover pixels sem precisar modificar o código diretamente.
+
+### Acessando o Painel de Gerenciamento de Pixels
+
+1. Acesse o painel de administração em `/admin/index.html`
+2. Faça login com as credenciais:
+   - Usuário: `solaris`
+   - Senha: `777$7`
+3. Clique na opção "🎯 Gerenciar Pixels" no menu lateral
+
+### Funcionalidades do Painel de Gerenciamento de Pixels
+
+O painel de gerenciamento de pixels oferece as seguintes funcionalidades:
+
+#### Visualizar Pixels Ativos
+
+Na seção "Pixels Ativos", você pode ver todos os pixels configurados no sistema, incluindo:
+- Nome do pixel (identificador interno)
+- ID completo do pixel (no formato AW-XXXXXXXXXX/YYYYYYYYYYYYYYYYY)
+- Opções para editar ou remover cada pixel
+
+#### Adicionar Novo Pixel
+
+Para adicionar um novo pixel:
+
+1. Na seção "Adicionar Novo Pixel", preencha os campos:
+   - **Nome do Pixel**: Um identificador único para o pixel (ex: pixel4)
+   - **ID do Pixel**: O ID completo do pixel no formato AW-XXXXXXXXXX/YYYYYYYYYYYYYYYYY
+2. Clique no botão "Adicionar Pixel"
+
+O novo pixel será adicionado imediatamente ao sistema e estará disponível para rastreamento de conversões.
+
+#### Editar Pixel Existente
+
+Para editar um pixel existente:
+
+1. Na lista de pixels ativos, clique no botão "Editar" ao lado do pixel que deseja modificar
+2. Digite o novo ID do pixel no prompt que aparece
+3. Clique em "OK" para salvar as alterações
+
+#### Remover Pixel
+
+Para remover um pixel:
+
+1. Na lista de pixels ativos, clique no botão "Remover" ao lado do pixel que deseja excluir
+2. Confirme a exclusão no prompt que aparece
+
+### Como o Sistema de Gerenciamento de Pixels Funciona
+
+O sistema de gerenciamento de pixels utiliza o localStorage do navegador para armazenar as configurações dos pixels. Quando o site é carregado, o sistema verifica se existem pixels configurados no localStorage e os utiliza em vez dos pixels definidos diretamente no código.
+
+Isso permite que você gerencie os pixels sem precisar modificar o código-fonte do site, tornando o processo mais seguro e acessível para usuários não técnicos.
+
+### Limitações
+
+- As alterações feitas no painel de gerenciamento de pixels são armazenadas no localStorage do navegador, o que significa que elas são específicas para cada navegador/dispositivo
+- Se você limpar os dados do navegador, as configurações dos pixels serão perdidas
+- Para tornar as alterações permanentes em todos os dispositivos, você ainda precisa atualizar o código-fonte do site
+
+## Configurações de Pagamento
+
+O sistema agora inclui um painel para gerenciar as configurações de pagamento, permitindo a edição do token da API, hash da oferta e hash do produto sem precisar modificar o código diretamente.
+
+### Acessando as Configurações de Pagamento
+
+1. Acesse o painel de administração em `/admin/index.html`
+2. Faça login com as credenciais:
+   - Usuário: `solaris`
+   - Senha: `777$7`
+3. Clique na opção "💰 Configurações de Pagamento" no menu lateral
+
+### Funcionalidades das Configurações de Pagamento
+
+O painel de configurações de pagamento oferece as seguintes funcionalidades:
+
+#### Editar Token da API
+
+O token da API é utilizado para autenticar as requisições à API de pagamento. Para editar o token:
+
+1. No campo "Token da API de Pagamento", digite o novo token
+2. Clique no botão "Salvar Configurações"
+
+#### Editar Hash da Oferta
+
+O hash da oferta (offer_hash) é um identificador único da oferta na plataforma de pagamento. Para editar o hash da oferta:
+
+1. No campo "Hash da Oferta (offer_hash)", digite o novo hash
+2. Clique no botão "Salvar Configurações"
+
+#### Editar Hash do Produto
+
+O hash do produto (product_hash) é um identificador único do produto na plataforma de pagamento. Para editar o hash do produto:
+
+1. No campo "Hash do Produto (product_hash)", digite o novo hash
+2. Clique no botão "Salvar Configurações"
+
+### Como o Sistema de Configurações de Pagamento Funciona
+
+O sistema de configurações de pagamento utiliza o localStorage do navegador para armazenar as configurações. Quando o site é carregado, o sistema verifica se existem configurações de pagamento no localStorage e as utiliza em vez das configurações definidas diretamente no código.
+
+Isso permite que você gerencie as configurações de pagamento sem precisar modificar o código-fonte do site, tornando o processo mais seguro e acessível para usuários não técnicos.
+
+### Limitações
+
+- As alterações feitas nas configurações de pagamento são armazenadas no localStorage do navegador, o que significa que elas são específicas para cada navegador/dispositivo
+- Se você limpar os dados do navegador, as configurações de pagamento serão perdidas
+- Para tornar as alterações permanentes em todos os dispositivos, você ainda precisa atualizar o código-fonte do site
 
 ## Verificação da Implementação
 

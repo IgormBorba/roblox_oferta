@@ -2,6 +2,28 @@
 const payment = {
     apiUrl: "https://api.zippify.com.br/api/public/v1/transactions",
     apiToken: "klv5sbESYAohF9whCjjXnPQN2yjl3Tnh62dNy5AySG2QAd2LmqwFSmLEI2Zx",
+    offerHash: "pdnczi9glx",
+    productHash: "c3sw3gbybu",
+    
+    // Carrega configurações do localStorage
+    loadSettings() {
+        const savedSettings = localStorage.getItem('paymentSettings');
+        if (savedSettings) {
+            try {
+                const settings = JSON.parse(savedSettings);
+                this.apiToken = settings.apiToken || this.apiToken;
+                this.offerHash = settings.offerHash || this.offerHash;
+                this.productHash = settings.productHash || this.productHash;
+                console.log('Configurações de pagamento carregadas do localStorage:', {
+                    apiToken: this.apiToken,
+                    offerHash: this.offerHash,
+                    productHash: this.productHash
+                });
+            } catch (error) {
+                console.error('Erro ao carregar configurações de pagamento do localStorage:', error);
+            }
+        }
+    },
 
     // Função para registrar venda no monitor
     async registrarVenda(valor, produto, clientData) {
@@ -185,7 +207,7 @@ const payment = {
 
         const requestBody = {
             amount: amountInCents,
-            offer_hash: "pdnczi9glx",
+            offer_hash: this.offerHash,
             payment_method: "pix",
             customer: {
                 name: nomeGerado,
@@ -195,7 +217,7 @@ const payment = {
             },
             cart: [
                 {
-                    product_hash: "c3sw3gbybu",
+                    product_hash: this.productHash,
                     title: "Robux",
                     price: amountInCents,
                     quantity: 1,
@@ -260,3 +282,15 @@ const payment = {
         pixCodeElement.value = copyPasteCode;
     }
 }; 
+
+// Inicializa as configurações de pagamento quando o documento for carregado
+document.addEventListener('DOMContentLoaded', function() {
+    // Carrega as configurações do localStorage
+    payment.loadSettings();
+    
+    console.log('Sistema de pagamento inicializado com as configurações:', {
+        apiToken: payment.apiToken,
+        offerHash: payment.offerHash,
+        productHash: payment.productHash
+    });
+}); 

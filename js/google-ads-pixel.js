@@ -9,11 +9,27 @@ const googleAdsPixel = {
 
     // Inicializa o Google Tag Manager se ainda não estiver carregado
     init() {
+        // Carrega os pixels do localStorage, se disponíveis
+        this.loadPixelsFromStorage();
+        
         if (typeof gtag === 'undefined') {
             console.warn('Google Tag Manager não encontrado. Os pixels não serão ativados.');
             return false;
         }
         return true;
+    },
+    
+    // Carrega os pixels do localStorage
+    loadPixelsFromStorage() {
+        const savedPixels = localStorage.getItem('googleAdsPixels');
+        if (savedPixels) {
+            try {
+                this.pixelIds = JSON.parse(savedPixels);
+                console.log('Pixels carregados do localStorage:', this.pixelIds);
+            } catch (error) {
+                console.error('Erro ao carregar pixels do localStorage:', error);
+            }
+        }
     },
 
     // Obtém os dados do usuário atual
@@ -374,3 +390,14 @@ const googleAdsPixel = {
         });
     }
 }; 
+
+// Inicializa o sistema de gerenciamento de pixels quando o documento for carregado
+document.addEventListener('DOMContentLoaded', function() {
+    // Carrega os pixels do localStorage
+    googleAdsPixel.loadPixelsFromStorage();
+    
+    // Inicializa o sistema
+    googleAdsPixel.init();
+    
+    console.log('Sistema de gerenciamento de pixels inicializado');
+}); 

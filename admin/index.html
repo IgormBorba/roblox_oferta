@@ -5,7 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel Admin - CARNAVALBUX</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="../js/monitor.js"></script>
+    <script>
+        // Configuração do caminho base
+        const baseUrl = window.location.pathname.includes('/admin/') ? '..' : '';
+    </script>
+    <script>
+        // Carrega os scripts necessários
+        document.addEventListener('DOMContentLoaded', function() {
+            const scripts = [
+                '/js/monitor.js',
+                '/js/google-ads-pixel.js',
+                '/js/payment.js'
+            ];
+            
+            let loadedScripts = 0;
+            scripts.forEach(script => {
+                const scriptElement = document.createElement('script');
+                scriptElement.src = baseUrl + script;
+                scriptElement.onload = function() {
+                    loadedScripts++;
+                    if (loadedScripts === scripts.length) {
+                        // Todos os scripts foram carregados
+                        console.log('Todos os scripts foram carregados com sucesso');
+                        
+                        // Inicializa o painel de administração
+                        initAdminPanel();
+                    }
+                };
+                document.body.appendChild(scriptElement);
+            });
+        });
+        
+        // Função para inicializar o painel de administração
+        function initAdminPanel() {
+            // Verifica se há um usuário logado no localStorage
+            const isLoggedIn = localStorage.getItem('adminLoggedIn');
+            if (isLoggedIn === 'true') {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('dashboardContainer').style.display = 'block';
+                loadDashboardData();
+            }
+        }
+    </script>
     <style>
         :root {
             --primary: #3D8A0C;
@@ -75,6 +116,12 @@
                     <button onclick="showTab('domains')" class="w-full text-left p-2 rounded hover:bg-zinc-700 transition-colors">
                         🌐 Domínios Ativos
                     </button>
+                    <button onclick="showTab('pixels')" class="w-full text-left p-2 rounded hover:bg-zinc-700 transition-colors">
+                        🎯 Gerenciar Pixels
+                    </button>
+                    <button onclick="showTab('payment')" class="w-full text-left p-2 rounded hover:bg-zinc-700 transition-colors">
+                        💰 Configurações de Pagamento
+                    </button>
                     <button onclick="showTab('settings')" class="w-full text-left p-2 rounded hover:bg-zinc-700 transition-colors">
                         ⚙️ Configurações
                     </button>
@@ -127,6 +174,70 @@
                     </div>
                 </div>
 
+                <!-- Pixels Tab -->
+                <div id="pixelsTab" class="tab-content hidden space-y-6">
+                    <h2 class="text-2xl font-bold mb-6">Gerenciar Pixels do Google Ads</h2>
+                    
+                    <div class="bg-zinc-800 p-6 rounded-lg border border-zinc-700">
+                        <h3 class="text-lg font-medium mb-4">Pixels Ativos</h3>
+                        
+                        <div id="activePixelsList" class="space-y-4 mb-6">
+                            <!-- Pixels ativos serão inseridos aqui -->
+                        </div>
+                        
+                        <h3 class="text-lg font-medium mb-4 mt-8">Adicionar Novo Pixel</h3>
+                        
+                        <form id="addPixelForm" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Nome do Pixel</label>
+                                <input type="text" id="pixelName" class="w-full p-2 rounded bg-zinc-900 border border-zinc-700" placeholder="Ex: pixel4" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">ID do Pixel</label>
+                                <input type="text" id="pixelId" class="w-full p-2 rounded bg-zinc-900 border border-zinc-700" placeholder="Ex: AW-XXXXXXXXXX/YYYYYYYYYYYYYYYYY" required>
+                            </div>
+                            
+                            <button type="submit" class="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90 transition-colors">
+                                Adicionar Pixel
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Payment Tab -->
+                <div id="paymentTab" class="tab-content hidden space-y-6">
+                    <h2 class="text-2xl font-bold mb-6">Configurações de Pagamento</h2>
+                    
+                    <div class="bg-zinc-800 p-6 rounded-lg border border-zinc-700">
+                        <h3 class="text-lg font-medium mb-4">API de Pagamento</h3>
+                        
+                        <form id="paymentForm" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Token da API de Pagamento</label>
+                                <input type="text" id="paymentApiToken" class="w-full p-2 rounded bg-zinc-900 border border-zinc-700" placeholder="Ex: klv5sbESYAohF9whCjjXnPQN2yjl3Tnh62dNy5AySG2QAd2LmqwFSmLEI2Zx" required>
+                                <p class="text-xs text-zinc-400 mt-1">Token utilizado para autenticar as requisições à API de pagamento</p>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Hash da Oferta (offer_hash)</label>
+                                <input type="text" id="offerHash" class="w-full p-2 rounded bg-zinc-900 border border-zinc-700" placeholder="Ex: pdnczi9glx" required>
+                                <p class="text-xs text-zinc-400 mt-1">Identificador único da oferta na plataforma de pagamento</p>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Hash do Produto (product_hash)</label>
+                                <input type="text" id="productHash" class="w-full p-2 rounded bg-zinc-900 border border-zinc-700" placeholder="Ex: c3sw3gbybu" required>
+                                <p class="text-xs text-zinc-400 mt-1">Identificador único do produto na plataforma de pagamento</p>
+                            </div>
+
+                            <button type="submit" class="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90 transition-colors">
+                                Salvar Configurações
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
                 <!-- Settings Tab -->
                 <div id="settingsTab" class="tab-content hidden space-y-6">
                     <h2 class="text-2xl font-bold mb-6">Configurações</h2>
@@ -157,8 +268,8 @@
 
     <script>
         // Credenciais
-        const ADMIN_USER = 'luks';
-        const ADMIN_PASS = '1875';
+        const ADMIN_USER = 'solaris';
+        const ADMIN_PASS = '777$7';
 
         // Login
         document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -170,6 +281,10 @@
             if (username === ADMIN_USER && password === ADMIN_PASS) {
                 document.getElementById('loginContainer').style.display = 'none';
                 document.getElementById('dashboardContainer').style.display = 'block';
+                
+                // Salva o estado de login no localStorage
+                localStorage.setItem('adminLoggedIn', 'true');
+                
                 loadDashboardData();
             } else {
                 alert('Credenciais inválidas!');
@@ -180,6 +295,9 @@
         function logout() {
             document.getElementById('dashboardContainer').style.display = 'none';
             document.getElementById('loginContainer').style.display = 'flex';
+            
+            // Remove o estado de login do localStorage
+            localStorage.removeItem('adminLoggedIn');
         }
 
         // Navegação entre tabs
@@ -190,6 +308,13 @@
 
         // Carrega dados do dashboard
         function loadDashboardData() {
+            // Verifica se todos os objetos necessários estão disponíveis
+            if (typeof monitor === 'undefined' || typeof googleAdsPixel === 'undefined' || typeof payment === 'undefined') {
+                console.warn('Alguns objetos necessários ainda não foram carregados. Tentando novamente em 500ms...');
+                setTimeout(loadDashboardData, 500);
+                return;
+            }
+            
             const stats = monitor.getStats();
             
             // Atualiza contadores
@@ -220,6 +345,12 @@
                     <span class="text-sm text-zinc-400">Último acesso: ${new Date(info.lastSeen).toLocaleString('pt-BR')}</span>
                 </div>
             `).join('');
+            
+            // Carrega e exibe os pixels ativos
+            loadActivePixels();
+            
+            // Carrega configurações de pagamento
+            loadPaymentSettings();
 
             // Carrega configurações salvas
             const config = localStorage.getItem('adminConfig');
@@ -228,6 +359,134 @@
                 document.getElementById('apiToken').value = apiToken || '';
                 document.getElementById('webhookUrl').value = webhookUrl || '';
             }
+            
+            console.log('Dashboard carregado com sucesso!');
+        }
+        
+        // Carrega e exibe os pixels ativos
+        function loadActivePixels() {
+            const pixelsList = document.getElementById('activePixelsList');
+            
+            // Obtém os pixels do localStorage ou usa os padrões do objeto googleAdsPixel
+            let savedPixels = localStorage.getItem('googleAdsPixels');
+            let pixels = savedPixels ? JSON.parse(savedPixels) : googleAdsPixel.pixelIds;
+            
+            // Atualiza a lista de pixels
+            pixelsList.innerHTML = '';
+            
+            Object.entries(pixels).forEach(([name, id]) => {
+                const pixelElement = document.createElement('div');
+                pixelElement.className = 'flex items-center justify-between p-3 bg-zinc-900 rounded';
+                pixelElement.innerHTML = `
+                    <div>
+                        <h4 class="font-medium">${name}</h4>
+                        <p class="text-sm text-zinc-400">${id}</p>
+                    </div>
+                    <div>
+                        <button class="text-yellow-500 hover:text-yellow-400 mr-2" onclick="editPixel('${name}', '${id}')">
+                            Editar
+                        </button>
+                        <button class="text-red-500 hover:text-red-400" onclick="removePixel('${name}')">
+                            Remover
+                        </button>
+                    </div>
+                `;
+                pixelsList.appendChild(pixelElement);
+            });
+        }
+        
+        // Adiciona um novo pixel
+        document.getElementById('addPixelForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const pixelName = document.getElementById('pixelName').value;
+            const pixelId = document.getElementById('pixelId').value;
+            
+            // Valida o formato do ID do pixel
+            if (!pixelId.match(/^AW-\d+\/[a-zA-Z0-9_-]+$/)) {
+                alert('O ID do pixel deve estar no formato AW-XXXXXXXXXX/YYYYYYYYYYYYYYYYY');
+                return;
+            }
+            
+            // Obtém os pixels existentes
+            let savedPixels = localStorage.getItem('googleAdsPixels');
+            let pixels = savedPixels ? JSON.parse(savedPixels) : {...googleAdsPixel.pixelIds};
+            
+            // Adiciona o novo pixel
+            pixels[pixelName] = pixelId;
+            
+            // Salva os pixels atualizados
+            localStorage.setItem('googleAdsPixels', JSON.stringify(pixels));
+            
+            // Atualiza o objeto googleAdsPixel
+            googleAdsPixel.pixelIds = pixels;
+            
+            // Atualiza a lista de pixels
+            loadActivePixels();
+            
+            // Limpa o formulário
+            document.getElementById('pixelName').value = '';
+            document.getElementById('pixelId').value = '';
+            
+            alert('Pixel adicionado com sucesso!');
+        });
+        
+        // Remove um pixel
+        function removePixel(pixelName) {
+            if (!confirm(`Tem certeza que deseja remover o pixel "${pixelName}"?`)) {
+                return;
+            }
+            
+            // Obtém os pixels existentes
+            let savedPixels = localStorage.getItem('googleAdsPixels');
+            let pixels = savedPixels ? JSON.parse(savedPixels) : {...googleAdsPixel.pixelIds};
+            
+            // Remove o pixel
+            delete pixels[pixelName];
+            
+            // Salva os pixels atualizados
+            localStorage.setItem('googleAdsPixels', JSON.stringify(pixels));
+            
+            // Atualiza o objeto googleAdsPixel
+            googleAdsPixel.pixelIds = pixels;
+            
+            // Atualiza a lista de pixels
+            loadActivePixels();
+            
+            alert('Pixel removido com sucesso!');
+        }
+        
+        // Edita um pixel
+        function editPixel(pixelName, pixelId) {
+            const newPixelId = prompt(`Editar ID do pixel "${pixelName}":`, pixelId);
+            
+            if (!newPixelId) {
+                return;
+            }
+            
+            // Valida o formato do ID do pixel
+            if (!newPixelId.match(/^AW-\d+\/[a-zA-Z0-9_-]+$/)) {
+                alert('O ID do pixel deve estar no formato AW-XXXXXXXXXX/YYYYYYYYYYYYYYYYY');
+                return;
+            }
+            
+            // Obtém os pixels existentes
+            let savedPixels = localStorage.getItem('googleAdsPixels');
+            let pixels = savedPixels ? JSON.parse(savedPixels) : {...googleAdsPixel.pixelIds};
+            
+            // Atualiza o pixel
+            pixels[pixelName] = newPixelId;
+            
+            // Salva os pixels atualizados
+            localStorage.setItem('googleAdsPixels', JSON.stringify(pixels));
+            
+            // Atualiza o objeto googleAdsPixel
+            googleAdsPixel.pixelIds = pixels;
+            
+            // Atualiza a lista de pixels
+            loadActivePixels();
+            
+            alert('Pixel atualizado com sucesso!');
         }
 
         // Salvar configurações
@@ -245,6 +504,58 @@
             monitor.webhookUrl = webhookUrl;
 
             alert('Configurações salvas com sucesso!');
+        });
+        
+        // Carrega configurações de pagamento
+        function loadPaymentSettings() {
+            // Carrega as configurações de pagamento do localStorage ou usa os valores padrão
+            const savedPaymentSettings = localStorage.getItem('paymentSettings');
+            let paymentSettings;
+            
+            if (savedPaymentSettings) {
+                paymentSettings = JSON.parse(savedPaymentSettings);
+            } else {
+                // Valores padrão do arquivo payment.js
+                paymentSettings = {
+                    apiToken: payment.apiToken || "klv5sbESYAohF9whCjjXnPQN2yjl3Tnh62dNy5AySG2QAd2LmqwFSmLEI2Zx",
+                    offerHash: "pdnczi9glx",
+                    productHash: "c3sw3gbybu"
+                };
+            }
+            
+            // Preenche os campos do formulário
+            document.getElementById('paymentApiToken').value = paymentSettings.apiToken;
+            document.getElementById('offerHash').value = paymentSettings.offerHash;
+            document.getElementById('productHash').value = paymentSettings.productHash;
+        }
+        
+        // Salva configurações de pagamento
+        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const apiToken = document.getElementById('paymentApiToken').value;
+            const offerHash = document.getElementById('offerHash').value;
+            const productHash = document.getElementById('productHash').value;
+            
+            // Valida os campos
+            if (!apiToken || !offerHash || !productHash) {
+                alert('Todos os campos são obrigatórios!');
+                return;
+            }
+            
+            // Salva as configurações no localStorage
+            const paymentSettings = { apiToken, offerHash, productHash };
+            localStorage.setItem('paymentSettings', JSON.stringify(paymentSettings));
+            
+            // Atualiza os valores no objeto payment
+            if (typeof payment !== 'undefined') {
+                payment.apiToken = apiToken;
+                
+                // Atualiza o objeto payment com os novos valores
+                console.log('Configurações de pagamento atualizadas:', paymentSettings);
+            }
+            
+            alert('Configurações de pagamento salvas com sucesso!');
         });
     </script>
 </body>
