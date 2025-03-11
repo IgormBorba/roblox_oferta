@@ -1,6 +1,5 @@
 const products = {
     items: [
-
         {
             id: "robux-800",
             title: "800 Robux",
