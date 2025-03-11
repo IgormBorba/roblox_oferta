@@ -1,25 +1,6 @@
 const products = {
     items: [
-        {
-            id: "robux-200",
-            title: "200 Robux",
-            price: 7.90,
-            original_price: 7.90,
-            discount_percent: 0,
-            image: "img/200rbx.png",
-            category: "robux",
-            automatic_delivery: true
-        },
-        {
-            id: "robux-400",
-            title: "400 Robux",
-            price: 10.90,
-            original_price: 15.90,
-            discount_percent: 31,
-            image: "img/400rbx.png",
-            category: "robux",
-            automatic_delivery: true
-        },
+
         {
             id: "robux-800",
             title: "800 Robux",
