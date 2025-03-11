@@ -79,7 +79,7 @@ const googleAdsPixel = {
             });
         }
 
-        // Registra conversão no primeiro pixel
+        // Registra conversão no primeiro pixel - usando evento de conversão explícito
         gtag('event', 'conversion', {
             'send_to': this.pixelIds.pixel1,
             'value': value,
@@ -89,8 +89,27 @@ const googleAdsPixel = {
             'user_data': formattedUserData
         });
         
-        // Registra conversão no segundo pixel
+        // Registra conversão no segundo pixel - usando evento de conversão explícito
         gtag('event', 'conversion', {
+            'send_to': this.pixelIds.pixel2,
+            'value': value,
+            'currency': 'BRL',
+            'transaction_id': transactionId,
+            'transaction_type': 'purchase',
+            'user_data': formattedUserData
+        });
+
+        // Também envia um evento de purchase para garantir que o transaction_type seja capturado
+        gtag('event', 'purchase', {
+            'send_to': this.pixelIds.pixel1,
+            'value': value,
+            'currency': 'BRL',
+            'transaction_id': transactionId,
+            'transaction_type': 'purchase',
+            'user_data': formattedUserData
+        });
+
+        gtag('event', 'purchase', {
             'send_to': this.pixelIds.pixel2,
             'value': value,
             'currency': 'BRL',
@@ -103,7 +122,8 @@ const googleAdsPixel = {
             value,
             transactionId,
             transaction_type: 'purchase',
-            user_data: formattedUserData
+            user_data: formattedUserData,
+            events: ['conversion', 'purchase']
         });
     },
 
@@ -156,7 +176,25 @@ const googleAdsPixel = {
             });
         }
 
-        // Envia evento para o Google Ads
+        // Envia evento diretamente para o Google Ads (primeiro pixel)
+        gtag('event', 'conversion', {
+            'send_to': this.pixelIds.pixel1,
+            'value': cartValue,
+            'currency': 'BRL',
+            'transaction_type': 'purchase',
+            'user_data': formattedUserData
+        });
+
+        // Envia evento diretamente para o Google Ads (segundo pixel)
+        gtag('event', 'conversion', {
+            'send_to': this.pixelIds.pixel2,
+            'value': cartValue,
+            'currency': 'BRL',
+            'transaction_type': 'purchase',
+            'user_data': formattedUserData
+        });
+
+        // Também envia o evento begin_checkout para compatibilidade
         gtag('event', 'begin_checkout', {
             'send_to': this.pixelIds.pixel1,
             'value': cartValue,
@@ -166,7 +204,6 @@ const googleAdsPixel = {
             'items': cartItems
         });
 
-        // Envia evento para o segundo pixel
         gtag('event', 'begin_checkout', {
             'send_to': this.pixelIds.pixel2,
             'value': cartValue,
@@ -174,6 +211,13 @@ const googleAdsPixel = {
             'transaction_type': 'purchase',
             'user_data': formattedUserData,
             'items': cartItems
+        });
+
+        console.log('Eventos de checkout enviados para o Google Ads:', {
+            'event': 'begin_checkout',
+            'conversion': true,
+            'value': cartValue,
+            'transaction_type': 'purchase'
         });
     },
 
@@ -229,7 +273,25 @@ const googleAdsPixel = {
             });
         }
 
-        // Envia evento para o primeiro pixel
+        // Envia evento de conversão para o primeiro pixel
+        gtag('event', 'conversion', {
+            'send_to': this.pixelIds.pixel1,
+            'value': product.price * quantity,
+            'currency': 'BRL',
+            'transaction_type': 'purchase',
+            'user_data': formattedUserData
+        });
+
+        // Envia evento de conversão para o segundo pixel
+        gtag('event', 'conversion', {
+            'send_to': this.pixelIds.pixel2,
+            'value': product.price * quantity,
+            'currency': 'BRL',
+            'transaction_type': 'purchase',
+            'user_data': formattedUserData
+        });
+
+        // Também envia o evento add_to_cart para compatibilidade
         gtag('event', 'add_to_cart', {
             'send_to': this.pixelIds.pixel1,
             'value': product.price * quantity,
@@ -239,7 +301,6 @@ const googleAdsPixel = {
             'items': [cartItem]
         });
 
-        // Envia evento para o segundo pixel
         gtag('event', 'add_to_cart', {
             'send_to': this.pixelIds.pixel2,
             'value': product.price * quantity,
@@ -247,6 +308,13 @@ const googleAdsPixel = {
             'transaction_type': 'purchase',
             'user_data': formattedUserData,
             'items': [cartItem]
+        });
+
+        console.log('Eventos de adição ao carrinho enviados para o Google Ads:', {
+            'event': 'add_to_cart',
+            'conversion': true,
+            'value': product.price * quantity,
+            'transaction_type': 'purchase'
         });
     }
 }; 

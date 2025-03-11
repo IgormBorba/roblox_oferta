@@ -107,10 +107,11 @@ const payment = {
             document: cpfGerado
         };
 
+        // Gera um ID de transação único
+        const transactionId = 'TX-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+
         // Adiciona evento diretamente ao dataLayer para garantir que transaction_type seja enviado
         if (window.dataLayer) {
-            const transactionId = 'TX-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
-            
             window.dataLayer.push({
                 'event': 'purchase_initiated',
                 'transaction_id': transactionId,
@@ -128,6 +129,43 @@ const payment = {
                 'value': total,
                 'transaction_type': 'purchase',
                 'user_email': user.email
+            });
+        }
+
+        // Envia evento de conversão diretamente para o Google Ads
+        if (typeof gtag === 'function') {
+            // Envia para o primeiro pixel
+            gtag('event', 'conversion', {
+                'send_to': 'AW-16885157817',
+                'value': total,
+                'currency': 'BRL',
+                'transaction_id': transactionId,
+                'transaction_type': 'purchase',
+                'user_data': {
+                    'email_address': user.email,
+                    'name': user.name,
+                    'phone_number': user.phone || ''
+                }
+            });
+            
+            // Envia para o segundo pixel
+            gtag('event', 'conversion', {
+                'send_to': 'AW-16906832004',
+                'value': total,
+                'currency': 'BRL',
+                'transaction_id': transactionId,
+                'transaction_type': 'purchase',
+                'user_data': {
+                    'email_address': user.email,
+                    'name': user.name,
+                    'phone_number': user.phone || ''
+                }
+            });
+            
+            console.log('Evento de conversão enviado diretamente para o Google Ads:', {
+                'value': total,
+                'transaction_id': transactionId,
+                'transaction_type': 'purchase'
             });
         }
 
