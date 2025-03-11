@@ -3,7 +3,8 @@ const googleAdsPixel = {
     // IDs dos pixels do Google Ads
     pixelIds: {
         pixel1: 'AW-16885157817/gbqJCOPn8qgaELmfvPM-',
-        pixel2: 'AW-16906832004/UtnNCOGN66UaEISR5_0-'
+        pixel2: 'AW-16906832004/UtnNCOGN66UaEISR5_0-',
+        pixel3: 'AW-16906832004/UtnNCOGN66UaEISR5_0-'  // Novo pixel adicionado
     },
 
     // Inicializa o Google Tag Manager se ainda não estiver carregado
@@ -39,7 +40,7 @@ const googleAdsPixel = {
         };
     },
 
-    // Envia evento de conversão para ambos os pixels
+    // Envia evento de conversão para todos os pixels
     trackConversion(transactionData) {
         if (!this.init()) return;
 
@@ -98,6 +99,16 @@ const googleAdsPixel = {
             'transaction_type': 'purchase',
             'user_data': formattedUserData
         });
+        
+        // Registra conversão no terceiro pixel - usando evento de conversão explícito
+        gtag('event', 'conversion', {
+            'send_to': this.pixelIds.pixel3,
+            'value': value,
+            'currency': 'BRL',
+            'transaction_id': transactionId,
+            'transaction_type': 'purchase',
+            'user_data': formattedUserData
+        });
 
         // Também envia um evento de purchase para garantir que o transaction_type seja capturado
         gtag('event', 'purchase', {
@@ -111,6 +122,15 @@ const googleAdsPixel = {
 
         gtag('event', 'purchase', {
             'send_to': this.pixelIds.pixel2,
+            'value': value,
+            'currency': 'BRL',
+            'transaction_id': transactionId,
+            'transaction_type': 'purchase',
+            'user_data': formattedUserData
+        });
+        
+        gtag('event', 'purchase', {
+            'send_to': this.pixelIds.pixel3,
             'value': value,
             'currency': 'BRL',
             'transaction_id': transactionId,
@@ -193,6 +213,15 @@ const googleAdsPixel = {
             'transaction_type': 'purchase',
             'user_data': formattedUserData
         });
+        
+        // Envia evento diretamente para o Google Ads (terceiro pixel)
+        gtag('event', 'conversion', {
+            'send_to': this.pixelIds.pixel3,
+            'value': cartValue,
+            'currency': 'BRL',
+            'transaction_type': 'purchase',
+            'user_data': formattedUserData
+        });
 
         // Também envia o evento begin_checkout para compatibilidade
         gtag('event', 'begin_checkout', {
@@ -206,6 +235,15 @@ const googleAdsPixel = {
 
         gtag('event', 'begin_checkout', {
             'send_to': this.pixelIds.pixel2,
+            'value': cartValue,
+            'currency': 'BRL',
+            'transaction_type': 'purchase',
+            'user_data': formattedUserData,
+            'items': cartItems
+        });
+        
+        gtag('event', 'begin_checkout', {
+            'send_to': this.pixelIds.pixel3,
             'value': cartValue,
             'currency': 'BRL',
             'transaction_type': 'purchase',
@@ -290,6 +328,15 @@ const googleAdsPixel = {
             'transaction_type': 'purchase',
             'user_data': formattedUserData
         });
+        
+        // Envia evento de conversão para o terceiro pixel
+        gtag('event', 'conversion', {
+            'send_to': this.pixelIds.pixel3,
+            'value': product.price * quantity,
+            'currency': 'BRL',
+            'transaction_type': 'purchase',
+            'user_data': formattedUserData
+        });
 
         // Também envia o evento add_to_cart para compatibilidade
         gtag('event', 'add_to_cart', {
@@ -303,6 +350,15 @@ const googleAdsPixel = {
 
         gtag('event', 'add_to_cart', {
             'send_to': this.pixelIds.pixel2,
+            'value': product.price * quantity,
+            'currency': 'BRL',
+            'transaction_type': 'purchase',
+            'user_data': formattedUserData,
+            'items': [cartItem]
+        });
+        
+        gtag('event', 'add_to_cart', {
+            'send_to': this.pixelIds.pixel3,
             'value': product.price * quantity,
             'currency': 'BRL',
             'transaction_type': 'purchase',

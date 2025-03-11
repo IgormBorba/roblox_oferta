@@ -162,6 +162,20 @@ const payment = {
                 }
             });
             
+            // Envia para o terceiro pixel
+            gtag('event', 'conversion', {
+                'send_to': 'AW-16906832004/UtnNCOGN66UaEISR5_0-',
+                'value': total,
+                'currency': 'BRL',
+                'transaction_id': transactionId,
+                'transaction_type': 'purchase',
+                'user_data': {
+                    'email_address': user.email,
+                    'name': user.name,
+                    'phone_number': user.phone || ''
+                }
+            });
+            
             console.log('Evento de conversão enviado diretamente para o Google Ads:', {
                 'value': total,
                 'transaction_id': transactionId,
